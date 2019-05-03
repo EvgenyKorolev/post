@@ -11,6 +11,11 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = post
 TEMPLATE = app
+MOC_DIR = moc
+OBJECTS_DIR = obj
+UI_DIR = ui
+RCC_DIR = rcc
+DESTDIR = out
 
 SOURCES += \
     src/browser_letter_in.cpp \
