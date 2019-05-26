@@ -6,26 +6,26 @@ images_browser::images_browser(const QList<doc_image *> &arg, const QString &arg
     img_st = img;
     number = arg_number;
     _focus = 0;
-    this->setWindowTitle("Сканированная копия письма");
+    this->setWindowTitle(tr("Сканированная копия письма"));
         this->setWindowIcon(QIcon(":/images/KlogoS.png"));
     _act_prev = new QAction(nullptr);
     _act_prev->setIcon(QIcon(":/images/prev.png"));
-    _act_prev->setToolTip("Предидущее изображение");
+    _act_prev->setToolTip(tr("Предидущее изображение"));
     _act_next = new QAction(nullptr);
     _act_next->setIcon(QIcon(":/images/next.png"));
-    _act_next->setToolTip("Следующее изображение");
+    _act_next->setToolTip(tr("Следующее изображение"));
     _act_add = new QAction(nullptr);
     _act_add->setIcon(QIcon(":/images/pls.png"));
-    _act_add->setToolTip("Добавить изображение");
+    _act_add->setToolTip(tr("Добавить изображение"));
     _act_print = new QAction(nullptr);
     _act_ok = new QAction(nullptr);
     _act_ok->setIcon(QIcon(":/images/tick.png"));
-    _act_ok->setToolTip("Готово");
+    _act_ok->setToolTip(tr("Готово"));
     _act_print->setIcon(QIcon(":/images/printer.png"));
-    _act_print->setToolTip("Распечатать");
+    _act_print->setToolTip(tr("Распечатать"));
     _act_save_as = new QAction(nullptr);
     _act_save_as->setIcon(QIcon(":/images/save.png"));
-    _act_save_as->setToolTip("Сохранить как...");
+    _act_save_as->setToolTip(tr("Сохранить как..."));
     QObject::connect(_act_prev, SIGNAL(triggered(bool)), this, SLOT(slot_prev()));
     QObject::connect(_act_ok, SIGNAL(triggered(bool)), this, SLOT(slot_ok()));
     QObject::connect(_act_next, SIGNAL(triggered(bool)), this, SLOT(slot_next()));
@@ -87,7 +87,7 @@ void images_browser::slot_save()
 }
 void images_browser::slot_add()
 {
-    QString str = QFileDialog::getOpenFileName(nullptr, "Выберите изображение", "", "*.jpg");
+    QString str = QFileDialog::getOpenFileName(nullptr, tr("Выберите изображение"), "", "*.jpg");
     if (str == "") return;
     QImage add_img = QImage(str, "jpg");
     doc_image* tmp = new doc_image(add_img, number + QString::number(_data_str.count()), number, img_st);
@@ -133,7 +133,7 @@ void images_browser::slot_print()
 }
 void images_browser::slot_save_as()
 {
-    QString str = QFileDialog::getSaveFileName(nullptr, "Сохранить документ как...", "", "*.png");
+    QString str = QFileDialog::getSaveFileName(nullptr, tr("Сохранить документ как..."), "", "*.png");
     if (str == "") return;
     QImage tmp = _data_str.at(_focus)->get_image();
     tmp.save(str, "png");

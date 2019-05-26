@@ -8,8 +8,8 @@ yes_no::yes_no(const QString &arg1, const QString &arg2, QWidget *parent) : QDia
     QBoxLayout* push_pay = new QBoxLayout(QBoxLayout::LeftToRight);
     QLabel* inf = new QLabel();
     inf->setText(arg2);
-    QPushButton* but_ok = new QPushButton("Да");
-    QPushButton* but_cancel = new QPushButton("Отмена");
+    QPushButton* but_ok = new QPushButton(tr("Да"));
+    QPushButton* but_cancel = new QPushButton(tr("Отмена"));
     QObject::connect(but_ok, SIGNAL(clicked()), this, SLOT(accept()));
     QObject::connect(but_cancel, SIGNAL(clicked()), this, SLOT(reject()));
     push_pay->addWidget(but_ok);

@@ -67,19 +67,19 @@ QVariant my_model_out::headerData(int section, Qt::Orientation orientation, int 
     if (role == Qt::DisplayRole && orientation == Qt::Horizontal){
         switch (section){
         case 0:
-            return QVariant("№ фирменного бланка");
+            return QVariant(tr("№ фирменного бланка"));
         case 1:
-            return QVariant("Исходящий № док-та");
+            return QVariant(tr("Исходящий № док-та"));
         case 2:
-            return QVariant("Корреспондент (кому направлен)");
+            return QVariant(tr("Корреспондент (кому направлен)"));
         case 3:
-            return QVariant("Краткое содержание");
+            return QVariant(tr("Краткое содержание"));
         case 4:
-            return QVariant("Ответственный исполнитель");
+            return QVariant(tr("Ответственный исполнитель"));
         case 5:
-            return QVariant("Примечание");
+            return QVariant(tr("Примечание"));
         case 6:
-            return QVariant("Дата регистрации");
+            return QVariant(tr("Дата регистрации"));
         }
     }
     return QVariant();

@@ -1,5 +1,7 @@
 #include "proxy_out.h"
 
+#include <QObject>
+
 proxy_out::proxy_out(QSqlDatabase *arg)
 {
     _dbw = *arg;
@@ -29,7 +31,7 @@ letter_out proxy_out::at(int arg) const
     QSqlQuery query(_dbw);
     QSqlRecord rec;
     if (!query.exec("SELECT * FROM out_data WHERE inq = '" + QString::number(arg) + "';")){
-         QMessageBox::information(nullptr, "Внимание", "Что-то не то с чтением базы данных data.db3");
+         QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("Что-то не то с чтением базы данных data.db3"));
     }
     query.first();
     rec = query.record();
@@ -45,7 +47,7 @@ letter_out proxy_out::at(int arg) const
     ret.set_notice(my::base64_minus(query.value(rec.indexOf("notice")).toString()));
     if (query.value(rec.indexOf("fix")).toString() == "true"){ret.set_fix();}
     if (!query.exec("SELECT * FROM out_foto WHERE label_uniq = '" + ret.get_inv() + "';")){
-        QMessageBox::information(nullptr, "Внимание", "Что-то не то с чтением базы данных data.db3");
+        QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("Что-то не то с чтением базы данных data.db3"));
    }
     rec = query.record();
     while (query.next()){
@@ -67,7 +69,8 @@ void proxy_out::append(letter_out* arg)
                     my::base64_plus(arg->get_doc_out_number()) + "', '" + my::base64_plus(arg->get_send_rec()) + "', '" + my::base64_plus(arg->get_content()) + "', '" +
                     my::base64_plus(arg->get_worker()) + "', '" + QString::number(sys_dat.toMSecsSinceEpoch()) + "', '" +
                     fix + "', '" + my::base64_plus(arg->get_blank_number()) + "', '"  + my::base64_plus(arg->get_notice()) + "', '" + arg->get_inv() + "');")){
-        QMessageBox::information(nullptr, "Внимание", "Что-то не то с добавлением записи в базу данных. <br> Возможно не уникальный номер входящего документа или бланка");
+        QMessageBox::information(nullptr, QObject::tr("Внимание"),
+                                 QObject::tr("Что-то не то с добавлением записи в базу данных. <br> Возможно не уникальный номер входящего документа или бланка"));
     }
 }
 void proxy_out::insert(int row, letter_out* arg)
@@ -81,6 +84,6 @@ void proxy_out::insert(int row, letter_out* arg)
                     my::base64_plus(arg->get_worker()) + "', sys_data = '" + QString::number(sys_dat.toMSecsSinceEpoch()) + "', fix = '" +
                     fix + "', blank_number = '" + my::base64_plus(arg->get_blank_number()) + "', notice = '" +
                     my::base64_plus(arg->get_notice()) + "', label_uniq = '" + arg->get_inv() + "' WHERE inq = '" + QString::number(row + 1) + "';")) {
-        QMessageBox::information(nullptr, "Внимание", "Что-то не то с добавлением записи в базу данных data.db3");
+        QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("Что-то не то с добавлением записи в базу данных data.db3"));
     }
 }

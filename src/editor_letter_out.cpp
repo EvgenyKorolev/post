@@ -3,11 +3,11 @@
 editor_letter_out::editor_letter_out(letter_out *arg, QWidget *pather) : QDialog(pather)
 {
     _data = arg;
-    this->setWindowTitle("Исходящий документ:");
+    this->setWindowTitle(tr("Исходящий документ:"));
     this->setWindowIcon(QIcon(":/images/KlogoS.png"));
 // Номер фирменного бланка
     QLabel *numlab = new QLabel();
-        numlab->setText("№ фирм. бланка: ");
+        numlab->setText(tr("№ фирм. бланка: "));
         numlab->setMinimumWidth(90);
         numlab->setMaximumWidth(90);
         _blank_number = new QLineEdit();
@@ -19,7 +19,7 @@ editor_letter_out::editor_letter_out(letter_out *arg, QWidget *pather) : QDialog
         num_lay->addWidget(_blank_number);
 // Исходящий № док-та
     QLabel *innumlab = new QLabel();
-        innumlab->setText("Исходящий № док-та: ");
+        innumlab->setText(tr("Исходящий № док-та: "));
         innumlab->setMinimumWidth(115);
         innumlab->setMaximumWidth(115);
         _d_o_number = new QLineEdit();
@@ -31,7 +31,7 @@ editor_letter_out::editor_letter_out(letter_out *arg, QWidget *pather) : QDialog
         num_lay->addStretch();
 // Корреспондент (кому направлен документ)
     QLabel *corlab = new QLabel();
-        corlab->setText("Корреспондент:");
+        corlab->setText(tr("Корреспондент:"));
         corlab->setMinimumWidth(90);
         corlab->setMaximumWidth(90);
         _send_rec = new QLineEdit();
@@ -45,7 +45,7 @@ editor_letter_out::editor_letter_out(letter_out *arg, QWidget *pather) : QDialog
         cor_lay->addStretch();
 // Краткое содержание
     QLabel *contlab = new QLabel();
-        contlab->setText("Краткое содержание:");
+        contlab->setText(tr("Краткое содержание:"));
         contlab->setMinimumWidth(155);
         contlab->setMaximumWidth(155);
         _cont = new QTextEdit();
@@ -59,13 +59,13 @@ editor_letter_out::editor_letter_out(letter_out *arg, QWidget *pather) : QDialog
         cont_lay->addWidget(contlab);
         cont_lay->addWidget(_cont);
 // Кнопка просмотра изображений
-        QPushButton *image_key = new QPushButton("Изображения...");
+        QPushButton *image_key = new QPushButton(tr("Изображения..."));
         QObject::connect(image_key, SIGNAL(clicked()), this, SLOT(slot_list_images()));
 // Контроль и фиксация документа
     QBoxLayout *check_lay = new QBoxLayout(QBoxLayout::TopToBottom);
     QBoxLayout *fix_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     _fixbox = new QCheckBox();
-    QLabel *fixlab = new QLabel("Провести:");
+    QLabel *fixlab = new QLabel(tr("Провести:"));
         _fixbox->setCheckState(Qt::Checked);
     fix_lay->addWidget(fixlab);
     fix_lay->addStretch();
@@ -76,7 +76,7 @@ editor_letter_out::editor_letter_out(letter_out *arg, QWidget *pather) : QDialog
     cont_lay->addStretch();
 // Ответственный исполнитель
     QLabel *worklab = new QLabel();
-        worklab->setText("Ответственный исполнитель: ");
+        worklab->setText(tr("Ответственный исполнитель: "));
         worklab->setMinimumWidth(155);
         worklab->setMaximumWidth(155);
         _work = new QLineEdit();
@@ -89,7 +89,7 @@ editor_letter_out::editor_letter_out(letter_out *arg, QWidget *pather) : QDialog
         work_lay->addStretch();
 // Примечание
     QLabel *notlab = new QLabel();
-        notlab->setText("Примечание: ");
+        notlab->setText(tr("Примечание: "));
         notlab->setMinimumWidth(155);
         notlab->setMaximumWidth(155);
         _notice = new QLineEdit();
@@ -102,8 +102,8 @@ editor_letter_out::editor_letter_out(letter_out *arg, QWidget *pather) : QDialog
         not_lay->addStretch();
 // Финальные кнопочки
     QBoxLayout *end_key = new QBoxLayout(QBoxLayout::LeftToRight);
-        QPushButton *ok_key = new QPushButton("Готово");
-        QPushButton *cancel_key = new QPushButton("Отмена");
+        QPushButton *ok_key = new QPushButton(tr("Готово"));
+        QPushButton *cancel_key = new QPushButton(tr("Отмена"));
         QObject::connect(ok_key, SIGNAL(clicked()), this, SLOT(slot_save()));
         QObject::connect(cancel_key, SIGNAL(clicked()), this, SLOT(reject()));
         end_key->addWidget(ok_key);
@@ -139,20 +139,20 @@ editor_letter_out::~editor_letter_out()
 void editor_letter_out::slot_save()
 {
     if (_d_o_number->text() == ""){
-        QMessageBox::information(nullptr, "Внимание", "Необходим исходящий номер документа");
+        QMessageBox::information(nullptr, tr("Внимание"), tr("Необходим исходящий номер документа"));
         return;
     }
     if (_send_rec->text() == ""){
-        QMessageBox::information(nullptr, "Внимание", "Необходимо указать получателя");
+        QMessageBox::information(nullptr, tr("Внимание"), tr("Необходимо указать получателя"));
         return;
     }
     _data->set_doc_out_number(_d_o_number->text());   // Исходящий  № док-та
-    _data->set_send_rec(_send_rec->text());              // Корреспондент (кому направлен / откуда поступил документ)
-    _data->set_content(_cont->toPlainText());                // Краткое содержание
-    _data->set_worker(_work->text());                   // Ответственный исполнитель
-    _data->set_blank_number(_blank_number->text());       // Номер фирменного бланка
-    _data->set_notice(_notice->text());                  // Примечание
-    if (Qt::Checked == _fixbox->checkState()){      // Провести документ
+    _data->set_send_rec(_send_rec->text());           // Корреспондент (кому направлен / откуда поступил документ)
+    _data->set_content(_cont->toPlainText());         // Краткое содержание
+    _data->set_worker(_work->text());                 // Ответственный исполнитель
+    _data->set_blank_number(_blank_number->text());   // Номер фирменного бланка
+    _data->set_notice(_notice->text());               // Примечание
+    if (Qt::Checked == _fixbox->checkState()){        // Провести документ
         _data->set_fix();
     }
     emit accept();

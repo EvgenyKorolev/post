@@ -5,7 +5,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     this->resize(1300, 700);
-    this->setWindowTitle("Регистрация входящих и исходящих писем");
+    this->setWindowTitle(tr("Регистрация входящих и исходящих писем"));
         this->setWindowIcon(QIcon(":/images/KlogoS.png"));
     settings& set = settings::getInatance();
         QSqlDatabase& db = set.get_db();
@@ -18,9 +18,9 @@ MainWindow::MainWindow(QWidget *parent)
     QMdiSubWindow* in_sub = new QMdiSubWindow(_main_area);
     QMdiSubWindow* out_sub = new QMdiSubWindow(_main_area);
     _inview = new my_view(in_sub);
-    _inview->setWindowTitle("Входящие документы");
+    _inview->setWindowTitle(tr("Входящие документы"));
     _outview = new my_view(out_sub);
-    _outview->setWindowTitle("Исходящие документы");
+    _outview->setWindowTitle(tr("Исходящие документы"));
     QSortFilterProxyModel *in_pr_model = new QSortFilterProxyModel();
     QSortFilterProxyModel *out_pr_model = new QSortFilterProxyModel();
     in_pr_model->setSourceModel(_inmodel);
@@ -32,8 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->setCentralWidget(_main_area);
     in_sub->setWidget(_inview);
     out_sub->setWidget(_outview);
-    in_sub->setWindowTitle("Входящие документы");
-    out_sub->setWindowTitle("Исходящие документы");
+    in_sub->setWindowTitle(tr("Входящие документы"));
+    out_sub->setWindowTitle(tr("Исходящие документы"));
     _main_area->setViewMode(QMdiArea::TabbedView);
     _main_area->addSubWindow(in_sub);
     _main_area->addSubWindow(out_sub);
@@ -67,19 +67,19 @@ MainWindow::MainWindow(QWidget *parent)
     _act_set = new QAction(nullptr);
     _act_help = new QAction(nullptr);
     _act_add->setIcon(QIcon(":/images/folder-add.png"));
-    _act_add->setToolTip("Добавить документ");
+    _act_add->setToolTip(tr("Добавить документ"));
     _act_filtr->setIcon(QIcon(":/images/zoom.png"));
-    _act_filtr->setToolTip("Найти");
+    _act_filtr->setToolTip(tr("Найти"));
     _act_close_filtr->setIcon(QIcon(":/images/times.png"));
-    _act_close_filtr->setToolTip("Сбросить фильтр");
+    _act_close_filtr->setToolTip(tr("Сбросить фильтр"));
     _act_about->setIcon(QIcon(":/images/info-large.png"));
-    _act_about->setToolTip("О программе");
+    _act_about->setToolTip(tr("О программе"));
     _act_print->setIcon(QIcon(":/images/printer.png"));
-    _act_print->setToolTip("Печать");
+    _act_print->setToolTip(tr("Печать"));
     _act_set->setIcon(QIcon(":/images/cog-outline.png"));
-    _act_set->setToolTip("Настройка");
+    _act_set->setToolTip(tr("Настройка"));
     _act_help->setIcon(QIcon(":/images/help.png"));
-    _act_help->setToolTip("Справка");
+    _act_help->setToolTip(tr("Справка"));
 
     QObject::connect(_act_about, SIGNAL(triggered(bool)), this, SLOT(slot_about()));
     QObject::connect(_act_add, SIGNAL(triggered(bool)), this, SLOT(slot_add()));
@@ -150,11 +150,11 @@ MainWindow::~MainWindow()
 void MainWindow::slot_active_window()
 {
     if (_main_area->activeSubWindow() == nullptr || _main_area->activeSubWindow() == nullptr) return;
-    if (_main_area->activeSubWindow()->windowTitle() == "Входящие документы") {
+    if (_main_area->activeSubWindow()->windowTitle() == tr("Входящие документы")) {
         _out_work_panel->hide();
         _in_work_panel->show();
         _type_view = "in";
-    } else if (_main_area->activeSubWindow()->windowTitle() == "Исходящие документы") {
+    } else if (_main_area->activeSubWindow()->windowTitle() == tr("Исходящие документы")) {
         _in_work_panel->hide();
         _out_work_panel->show();
         _type_view = "out";
@@ -177,7 +177,7 @@ void MainWindow::slot_filtr()
         my_filter->set_def("in");
         }  else if (_type_view == "out"){
                  my_filter->set_def("out");
-    } else {QMessageBox::information(nullptr, "Внимание", "Не получается создать окошко фильтра");}
+    } else {QMessageBox::information(nullptr, tr("Внимание"), tr("Не получается создать окошко фильтра"));}
     if (my_filter->exec() == QDialog::Accepted){
         QRegExp my_reg_string = my_filter->result_obj_reg();
 // Создаём модели посредники для поиска и сортировки
@@ -239,7 +239,7 @@ void MainWindow::slot_about()
                   "XMPP: kyrych@xmpp.ru "
                   "</th></tr></table>");
     about.setWindowIcon(QIcon(":/images/KlogoS.png"));
-    about.setWindowTitle("О программе:");
+    about.setWindowTitle(tr("О программе:"));
     about.exec();
 }
 void MainWindow::slot_close_filtr()
@@ -311,7 +311,7 @@ void MainWindow::slot_print()
 }
 void MainWindow::slot_set()
 {
-    yes_no* pmbx = new yes_no("Настройка",
+    yes_no* pmbx = new yes_no(tr("Настройка"),
                         "<HTML><HEAD><BODY><p align='center'><b>Внимание!</b></p><br>"
                         "Данная функция предназначена для указания пути к каталогу post с базой <br>"
                         "данных приложения (каталоги docs и data) в случае если он был перемещён.<br> "
@@ -377,6 +377,6 @@ void MainWindow::slot_help()
                   "</table><br>"
                   "<p align=\"center\">Более подробную справку можно найти на <a href=\"http://kyrych.ru/44-dev/app/158-post\">kyrych.ru</a></p><br>");
     about.setWindowIcon(QIcon(":/images/KlogoS.png"));
-    about.setWindowTitle("Справка:");
+    about.setWindowTitle(tr("Справка:"));
     about.exec();
 }

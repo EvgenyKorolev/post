@@ -1,5 +1,7 @@
 #include "proxy_in.h"
 
+#include <QObject>
+
 proxy_in::proxy_in(QSqlDatabase *arg)
 {
     _dbw = *arg;
@@ -29,7 +31,7 @@ letter_in proxy_in::at(int arg) const
     QSqlQuery query(_dbw);
     QSqlRecord rec;
     if (!query.exec("SELECT * FROM in_data WHERE inq = '" + QString::number(arg) + "';")){
-         QMessageBox::information(nullptr, "Внимание", "Что-то не то с чтением базы данных data.db3");
+         QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("Что-то не то с чтением базы данных data.db3"));
     }
     query.first();
     rec = query.record();
@@ -52,7 +54,7 @@ letter_in proxy_in::at(int arg) const
     ret.set_reception_date(rec_dat.date());
     if (query.value(rec.indexOf("fix")).toString() == "true"){ret.set_fix();}
     if (!query.exec("SELECT * FROM in_foto WHERE label_uniq = '" + ret.get_inv() + "';")){
-        QMessageBox::information(nullptr, "Внимание", "Что-то не то с чтением базы данных data.db3");
+        QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("Что-то не то с чтением базы данных data.db3"));
    }
     rec = query.record();
     while (query.next()){
@@ -78,7 +80,8 @@ void proxy_in::append(letter_in* arg)
                     my::base64_plus(arg->get_worker()) + "', '" + QString::number(sys_dat.toMSecsSinceEpoch()) + "', '" +
                     fix + "', '" + my::base64_plus(arg->get_doc_in_number()) + "', '" + QString::number(in_dat.toMSecsSinceEpoch()) + "', '" +
                     my::base64_plus(arg->get_recipient()) + "', '" + QString::number(rec_dat.toMSecsSinceEpoch()) + "', '" + control + "', '" + arg->get_inv() + "');")){
-        QMessageBox::information(nullptr, "Внимание", "Что-то не то с добавлением записи в базу данных. <br> Возможно не уникальный номер входящего документа");
+        QMessageBox::information(nullptr, QObject::tr("Внимание"),
+                                 QObject::tr("Что-то не то с добавлением записи в базу данных. <br> Возможно не уникальный номер входящего документа"));
     }
 }
 void proxy_in::insert(int row, letter_in* arg)
@@ -96,6 +99,6 @@ void proxy_in::insert(int row, letter_in* arg)
                     fix + "', doc_in_number = '" + my::base64_plus(arg->get_doc_in_number()) + "', in_date = '" +
                     QString::number(in_dat.toMSecsSinceEpoch()) + "', recipient = '" + my::base64_plus(arg->get_recipient()) + "', reception_date ='" +
                     QString::number(rec_dat.toMSecsSinceEpoch()) + "', control = '"+ control + "', label_uniq = '" + arg->get_inv() + "' WHERE inq ='" + QString::number(row + 1) + "';")) {
-        QMessageBox::information(nullptr, "Внимание", "Что-то не то с добавлением записи в базу данных data.db3");
+        QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("Что-то не то с добавлением записи в базу данных data.db3"));
     }
 }

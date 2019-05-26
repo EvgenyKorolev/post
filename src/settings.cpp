@@ -1,4 +1,7 @@
 #include "settings.h"
+
+#include <QObject>
+
 settings::settings()
 {
     QDir us_dir;
@@ -7,7 +10,7 @@ settings::settings()
     QFile tester_ini(set_path);
     db_path = "";
     if (!tester_ini.open(QIODevice::ReadWrite | QIODevice::Text)){
-        QMessageBox::information(nullptr, "Внимание", "Невозможно найти или сохранить путь к базе даных");
+        QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("Невозможно найти или сохранить путь к базе даных"));
     }
     QTextStream in_out(&tester_ini);
     QByteArray retar2 = tester_ini.readAll();
@@ -28,7 +31,7 @@ settings::settings()
     if (!tester.exists()){ create_base();}
     _db = QSqlDatabase::addDatabase("QSQLITE");
     _db.setDatabaseName(_db_dir);
-    if(!_db.open()){ QMessageBox::information(nullptr, "Внимание", "База данных не открывается data.db3");}
+    if(!_db.open()){ QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("База данных не открывается data.db3"));}
 }
 QString settings::get_img_dir() const
 {
@@ -50,24 +53,24 @@ void settings::create_base()
     my_dir.mkdir("data");
     QSqlDatabase temp_db = QSqlDatabase::addDatabase("QSQLITE");
     temp_db.setDatabaseName(_db_dir);
-    if(!temp_db.open()){ QMessageBox::information(nullptr, "Внимание", "База данных не открывается data.db3");}
+    if(!temp_db.open()){ QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("База данных не открывается data.db3"));}
     QSqlQuery query;
     QString prep = "CREATE TABLE out_data (doc_out_number TEXT UNIQUE NOT NULL, send_rec TEXT, content TEXT, worker TEXT, sys_data INTEGER, fix TEXT, blank_number TEXT UNIQUE, notice TEXT, label_uniq TEXT UNIQUE NOT NULL, inq INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL);";
         if (!query.exec(prep)) {
-            QMessageBox::information(nullptr, "Внимание", "База данных пуста и не удается создать таблицу in_data");
+            QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("База данных пуста и не удается создать таблицу in_data"));
         }
         prep = "CREATE TABLE in_data (doc_out_number TEXT, send_rec TEXT, content TEXT, worker TEXT, sys_data INTEGER, fix TEXT, doc_in_number TEXT UNIQUE NOT NULL, in_date INTEGER, recipient TEXT, reception_date INTEGER, control TEXT, label_uniq TEXT UNIQUE NOT NULL, inq INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL);";
             if (!query.exec(prep)) {
-                QMessageBox::information(nullptr, "Внимание", "База данных пуста и не удается создать таблицу out_data");
+                QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("База данных пуста и не удается создать таблицу out_data"));
             }
 // doc_out TEXT - номер документа, adr_str TEXT - имя файла, uniq_str - тип хранения (пока свободно), im_hash TEXT - хэш картинки
        QString prep2 = "CREATE TABLE out_foto (label_uniq TEXT, adr_str TEXT, uniq_str TEXT, im_hash TEXT, inq INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL);";
             if (!query.exec(prep2)) {
-                QMessageBox::information(nullptr, "Внимание", "База данных пуста и не удается создать таблицу out_foto");
+                QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("База данных пуста и не удается создать таблицу out_foto"));
             }
         prep2 = "CREATE TABLE in_foto (label_uniq TEXT, adr_str TEXT, uniq_str TEXT, im_hash TEXT, inq INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL);";
             if (!query.exec(prep2)) {
-                QMessageBox::information(nullptr, "Внимание", "База данных пуста и не удается создать таблицу in_foto");
+                QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("База данных пуста и не удается создать таблицу in_foto"));
             }
     temp_db.close();
 }
@@ -75,7 +78,7 @@ QString settings::choise_set_path()
 {
     QString str{""};
     while(str == "") {
-    str = QFileDialog::getExistingDirectory(nullptr, "Выберите папку с данными программы", QDir::homePath(), QFileDialog::ShowDirsOnly);
+    str = QFileDialog::getExistingDirectory(nullptr, QObject::tr("Выберите папку с данными программы"), QDir::homePath(), QFileDialog::ShowDirsOnly);
     }
     QByteArray retar;
     retar.append(str);
@@ -87,7 +90,7 @@ bool settings::choise_patch()
 {
     QFile tester_ini(set_path);
     if (!tester_ini.open(QIODevice::WriteOnly | QIODevice::Text)){
-        QMessageBox::information(nullptr, "Внимание", "Невозможно найти или сохранить путь к базе даных");
+        QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("Невозможно найти или сохранить путь к базе даных"));
         return false;
     }
     QTextStream in_out(&tester_ini);
@@ -108,7 +111,7 @@ bool settings::choise_patch()
     tmp_db.setDatabaseName(_db_dir);
     tmp_db.setDatabaseName(_db_dir);
     if(!tmp_db.open()){
-        QMessageBox::information(nullptr, "Внимание", "База данных не открывается data.db3");
+        QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("База данных не открывается data.db3"));
         return false;
     }
     _db = tmp_db;

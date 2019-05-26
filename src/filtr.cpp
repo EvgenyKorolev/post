@@ -2,7 +2,7 @@
 
 filtr::filtr(QString arg)
 {
-    this->setWindowTitle("Найти документы:");
+    this->setWindowTitle(tr("Найти документы:"));
     this->setWindowIcon(QIcon(":/images/KlogoS.png"));
 
     _type = new QComboBox();
@@ -18,35 +18,35 @@ filtr::filtr(QString arg)
     _focus_date->setChecked(Qt::Unchecked);
 // Выбираем где искать - входящие или исходящие
     if (arg == "in"){
-        _type->addItem("Входящие", QVariant("in"));
-        _type->addItem("Исходящие", QVariant("out"));
+        _type->addItem(tr("Входящие"), QVariant("in"));
+        _type->addItem(tr("Исходящие"), QVariant("out"));
     } else {
-        _type->addItem("Исходящие", QVariant("out"));
-        _type->addItem("Входящие", QVariant("in"));
+        _type->addItem(tr("Исходящие"), QVariant("out"));
+        _type->addItem(tr("Входящие"), QVariant("in"));
     }
 // Выбираем по какому атрибуту искать
-    _field->addItem("Вход. Номер", QVariant("in_nom"));
-    _field->addItem("Исх. номер", QVariant("out_nom"));
-    _field->addItem("Отправитель", QVariant("sender"));
-    _field->addItem("Содержание", QVariant("content"));
-    _field->addItem("Кому передан", QVariant("recipient"));
-    _field->addItem("Отв. исполнитель", QVariant("worker"));
+    _field->addItem(tr("Вход. Номер"), QVariant("in_nom"));
+    _field->addItem(tr("Исх. номер"), QVariant("out_nom"));
+    _field->addItem(tr("Отправитель"), QVariant("sender"));
+    _field->addItem(tr("Содержание"), QVariant("content"));
+    _field->addItem(tr("Кому передан"), QVariant("recipient"));
+    _field->addItem(tr("Отв. исполнитель"), QVariant("worker"));
     QObject::connect(_type, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_select_type()));
 // Выбираем искать точное соответствие или вхождение
-    _obj_include->addItem("Содержит", QVariant("incl"));
-    _obj_include->addItem("Точно", QVariant("eq"));
+    _obj_include->addItem(tr("Содержит"), QVariant("incl"));
+    _obj_include->addItem(tr("Точно"), QVariant("eq"));
 // Значение атрибута по которому ищем
     _object->setText("");
 // Как рассматривать дату - искать то что раньше, искать то что позже или искать точно
-    _date_status->addItem("Раньше", QVariant ("before"));
-    _date_status->addItem("Позже", QVariant ("after"));
-    _date_status->addItem("Точно", QVariant ("equal"));
+    _date_status->addItem(tr("Раньше"), QVariant ("before"));
+    _date_status->addItem(tr("Позже"), QVariant ("after"));
+    _date_status->addItem(tr("Точно"), QVariant ("equal"));
 // По какой именно дате искать
-    _date_type->addItem("Дата получения", QVariant("in_date"));
-    _date_type->addItem("Дата документа", QVariant("doc_date"));
+    _date_type->addItem(tr("Дата получения"), QVariant("in_date"));
+    _date_type->addItem(tr("Дата документа"), QVariant("doc_date"));
 // Последняя кнопка
-    QPushButton* ok_button = new QPushButton("Поиск");
-    QPushButton* cancel_button = new QPushButton("отмена");
+    QPushButton* ok_button = new QPushButton(tr("Поиск"));
+    QPushButton* cancel_button = new QPushButton(tr("отмена"));
     QObject::connect(cancel_button, SIGNAL(clicked(bool)), this, SLOT(reject()));
     QObject::connect(ok_button, SIGNAL(clicked(bool)), this, SLOT(slot_find()));
     QBoxLayout* end_lay = new QBoxLayout(QBoxLayout::LeftToRight);
@@ -94,24 +94,24 @@ void filtr::slot_select_type()
     _date_type->clear();
     // Выбираем по какому атрибуту искать
     if (_type->itemData(_type->currentIndex()).toString() == "in"){
-        _field->addItem("Вход. Номер", QVariant("in_nom"));
-        _field->addItem("Исх. номер", QVariant("out_nom"));
-        _field->addItem("Отправитель", QVariant("sender"));
-        _field->addItem("Содержание", QVariant("content"));
-        _field->addItem("Кому передан", QVariant("recipient"));
-        _field->addItem("Отв. исполнитель", QVariant("worker"));
+        _field->addItem(tr("Вход. Номер"), QVariant("in_nom"));
+        _field->addItem(tr("Исх. номер"), QVariant("out_nom"));
+        _field->addItem(tr("Отправитель"), QVariant("sender"));
+        _field->addItem(tr("Содержание"), QVariant("content"));
+        _field->addItem(tr("Кому передан"), QVariant("recipient"));
+        _field->addItem(tr("Отв. исполнитель"), QVariant("worker"));
 // По какой именно дате искать
-        _date_type->addItem("Дата получения", QVariant("in_date"));
-        _date_type->addItem("Дата документа", QVariant("doc_date"));
+        _date_type->addItem(tr("Дата получения"), QVariant("in_date"));
+        _date_type->addItem(tr("Дата документа"), QVariant("doc_date"));
     } else if (_type->itemData(_type->currentIndex()).toString() == "out"){
-        _field->addItem("№ фирм. бланка", QVariant("blank"));
-        _field->addItem("Исх. номер", QVariant("out_nom"));
-        _field->addItem("Адресат", QVariant("recipient"));
-        _field->addItem("Содержание", QVariant("content"));
-        _field->addItem("Отв. исполнитель", QVariant("worker"));
-        _field->addItem("Примечание", QVariant("notice"));
+        _field->addItem(tr("№ фирм. бланка"), QVariant("blank"));
+        _field->addItem(tr("Исх. номер"), QVariant("out_nom"));
+        _field->addItem(tr("Адресат"), QVariant("recipient"));
+        _field->addItem(tr("Содержание"), QVariant("content"));
+        _field->addItem(tr("Отв. исполнитель"), QVariant("worker"));
+        _field->addItem(tr("Примечание"), QVariant("notice"));
 // По какой именно дате искать
-        _date_type->addItem("Дата регистрации", QVariant("sys_date"));
+        _date_type->addItem(tr("Дата регистрации"), QVariant("sys_date"));
     }
 }
 void filtr::slot_find()
@@ -166,11 +166,11 @@ bool filtr::result_focus_date()
 void filtr::set_def(QString arg){
     _type->clear();
     if (arg == "in"){
-        _type->addItem("Входящие", QVariant("in"));
-        _type->addItem("Исходящие", QVariant("out"));
+        _type->addItem(tr("Входящие"), QVariant("in"));
+        _type->addItem(tr("Исходящие"), QVariant("out"));
     } else {
-        _type->addItem("Исходящие", QVariant("out"));
-        _type->addItem("Входящие", QVariant("in"));
+        _type->addItem(tr("Исходящие"), QVariant("out"));
+        _type->addItem(tr("Входящие"), QVariant("in"));
     }
     slot_select_type();
 }

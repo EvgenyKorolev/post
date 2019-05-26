@@ -1,5 +1,7 @@
 #include "doc_image.h"
 
+#include <QObject>
+
 doc_image::doc_image(img_status ims)
 {
     set_type(ims);
@@ -36,7 +38,7 @@ doc_image::doc_image(const QImage &arg, const QString& adr, const QString& arg_n
             tmp_query = "INSERT INTO in_foto(label_uniq, adr_str, uniq_str, im_hash) VALUES('" + number_doc + "', '" + _adr_str + "', '" + _uniq_str +"', '" + hash + "');";
         }
         if (!query.exec(tmp_query)){
-            QMessageBox::information(nullptr, "Внимание", "Что-то не то с сохранением doc_image");
+            QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("Что-то не то с сохранением doc_image"));
         }
 }
 bool doc_image::set_image(const QImage& arg, const QString& adr, const QString& number, img_status ims)
@@ -69,7 +71,7 @@ bool doc_image::set_image(const QImage& arg, const QString& adr, const QString& 
                    _adr_str + "', '" + _uniq_str + "', '" + hash + "');";
     }
     if (!query.exec(tmp_query)){
-        QMessageBox::information(nullptr, "Внимание", "Что-то не то с сохранением img_set");
+        QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("Что-то не то с сохранением img_set"));
         return false;
     }
     return true;
@@ -89,7 +91,7 @@ QImage doc_image::get_image() const
     }
     query.exec(tmp_query);
     if (!query.exec(tmp_query)){
-        QMessageBox::information(nullptr, "Внимание", "Что-то не то с стением изображения");
+        QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("Что-то не то с стением изображения"));
         return QImage();
     }
     query.first();

@@ -3,11 +3,11 @@
 editor_letter_in::editor_letter_in(letter_in *arg, QWidget *parent) : QDialog(parent)
 {
     _data = arg;
-    this->setWindowTitle("Входящий документ:");
+    this->setWindowTitle(tr("Входящий документ:"));
     this->setWindowIcon(QIcon(":/images/KlogoS.png"));
 // Входящий номер документа
     QLabel *numlab = new QLabel();
-        numlab->setText("Входящий номер: ");
+        numlab->setText(tr("Входящий номер: "));
         numlab->setMinimumWidth(90);
         numlab->setMaximumWidth(90);
         _doc_in_number = new QLineEdit();
@@ -19,7 +19,7 @@ editor_letter_in::editor_letter_in(letter_in *arg, QWidget *parent) : QDialog(pa
         num_lay->addWidget(_doc_in_number);
 // Исходящий № док-та
     QLabel *innumlab = new QLabel();
-        innumlab->setText("Исходящий № док-та: ");
+        innumlab->setText(tr("Исходящий № док-та: "));
         innumlab->setMinimumWidth(115);
         innumlab->setMaximumWidth(115);
         _d_o_number = new QLineEdit();
@@ -31,7 +31,7 @@ editor_letter_in::editor_letter_in(letter_in *arg, QWidget *parent) : QDialog(pa
         num_lay->addStretch();
 // Дата документа
     QLabel *indnumlab = new QLabel();
-        indnumlab->setText("Дата док-та:");
+        indnumlab->setText(tr("Дата док-та:"));
         indnumlab->setMinimumWidth(90);
         indnumlab->setMaximumWidth(90);
         _in_date = new QDateEdit();
@@ -49,7 +49,7 @@ editor_letter_in::editor_letter_in(letter_in *arg, QWidget *parent) : QDialog(pa
         dat_lay->addWidget(_in_date);
 // Дата получения
     QLabel *rdlab = new QLabel();
-        rdlab->setText("Дата получения: ");
+        rdlab->setText(tr("Дата получения: "));
         _reception_date = new QDateEdit();
         if ( tmp == _data->get_in_date()){
             _reception_date->setDate(QDate::currentDate());
@@ -62,7 +62,7 @@ editor_letter_in::editor_letter_in(letter_in *arg, QWidget *parent) : QDialog(pa
         dat_lay->addWidget(_reception_date);
 // Корреспондент (откуда поступил документ)
     QLabel *corlab = new QLabel();
-        corlab->setText("Корреспондент:   ");
+        corlab->setText(tr("Корреспондент:   "));
         corlab->setMinimumWidth(90);
         corlab->setMaximumWidth(90);
         _send_rec = new QLineEdit();
@@ -76,7 +76,7 @@ editor_letter_in::editor_letter_in(letter_in *arg, QWidget *parent) : QDialog(pa
         cor_lay->addStretch();
 // Краткое содержание
     QLabel *contlab = new QLabel();
-        contlab->setText("Краткое содержание:");
+        contlab->setText(tr("Краткое содержание:"));
         contlab->setMinimumWidth(155);
         contlab->setMaximumWidth(155);
         _cont = new QTextEdit();
@@ -90,7 +90,7 @@ editor_letter_in::editor_letter_in(letter_in *arg, QWidget *parent) : QDialog(pa
         cont_lay->addWidget(contlab);
         cont_lay->addWidget(_cont);
 // Кнопка просмотра изображений
-        QPushButton *image_key = new QPushButton("Изображения...");
+        QPushButton *image_key = new QPushButton(tr("Изображения..."));
         QObject::connect(image_key, SIGNAL(clicked()), this, SLOT(slot_list_images()));
 // Контроль и фиксация документа
     QBoxLayout *check_lay = new QBoxLayout(QBoxLayout::TopToBottom);
@@ -98,8 +98,8 @@ editor_letter_in::editor_letter_in(letter_in *arg, QWidget *parent) : QDialog(pa
     QBoxLayout *fix_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     _controlbox = new QCheckBox();
     _fixbox = new QCheckBox();
-    QLabel *controllab = new QLabel("На контроль:");
-    QLabel *fixlab = new QLabel("Провести:");
+    QLabel *controllab = new QLabel(tr("На контроль:"));
+    QLabel *fixlab = new QLabel(tr("Провести:"));
     if (_data->is_control()){
         _controlbox->setCheckState(Qt::Checked);
     } else _controlbox->setCheckState(Qt::Unchecked);
@@ -117,7 +117,7 @@ editor_letter_in::editor_letter_in(letter_in *arg, QWidget *parent) : QDialog(pa
     cont_lay->addStretch();
 // Кому передан документ
     QLabel *reclab = new QLabel();
-        reclab->setText("Кому передан документ:");
+        reclab->setText(tr("Кому передан документ:"));
         reclab->setMinimumWidth(155);
         reclab->setMaximumWidth(155);
         _recipient = new QLineEdit();
@@ -130,7 +130,7 @@ editor_letter_in::editor_letter_in(letter_in *arg, QWidget *parent) : QDialog(pa
         rec_lay->addStretch();
 // Ответственный исполнитель
     QLabel *worklab = new QLabel();
-        worklab->setText("Ответственный исполнитель: ");
+        worklab->setText(tr("Ответственный исполнитель: "));
         worklab->setMinimumWidth(155);
         worklab->setMaximumWidth(155);
         _work = new QLineEdit();
@@ -143,8 +143,8 @@ editor_letter_in::editor_letter_in(letter_in *arg, QWidget *parent) : QDialog(pa
         work_lay->addStretch();
 // Финальные кнопочки
     QBoxLayout *end_key = new QBoxLayout(QBoxLayout::LeftToRight);
-        QPushButton *ok_key = new QPushButton("Готово");
-        QPushButton *cancel_key = new QPushButton("Отмена");
+        QPushButton *ok_key = new QPushButton(tr("Готово"));
+        QPushButton *cancel_key = new QPushButton(tr("Отмена"));
         QObject::connect(ok_key, SIGNAL(clicked()), this, SLOT(slot_save()));
         QObject::connect(cancel_key, SIGNAL(clicked()), this, SLOT(reject()));
         end_key->addWidget(ok_key);
@@ -186,15 +186,15 @@ editor_letter_in::~editor_letter_in()
 void editor_letter_in::slot_save()
 {
     if (_doc_in_number->text() == ""){
-        QMessageBox::information(0, "Внимание", "Необходим входящий номер документа");
+        QMessageBox::information(nullptr, tr("Внимание"), tr("Необходим входящий номер документа"));
         return;
     }
     if (_d_o_number->text() == ""){
-        QMessageBox::information(0, "Внимание", "Необходим исходящий номер документа");
+        QMessageBox::information(nullptr, tr("Внимание"), tr("Необходим исходящий номер документа"));
         return;
     }
     if (_send_rec->text() == ""){
-        QMessageBox::information(0, "Внимание", "Необходимо указать отправителя");
+        QMessageBox::information(nullptr, tr("Внимание"), tr("Необходимо указать отправителя"));
         return;
     }
     _data->set_doc_in_number(_doc_in_number->text());   // Входящий номер документа

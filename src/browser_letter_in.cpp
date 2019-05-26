@@ -2,30 +2,21 @@
 
 browser_letter_in::browser_letter_in(letter_in *arg, QWidget *parent) : QDialog(parent)
 {
-    this->setWindowTitle("Входящий документ:");
+    this->setWindowTitle(tr("Входящий документ:"));
     this->setWindowIcon(QIcon(":/images/KlogoS.png"));
     _data =arg;
     QBoxLayout* main_lay = new QBoxLayout(QBoxLayout::TopToBottom);
-    QString data_doc_in_number = "Входящий номер документа: " + _data->get_doc_in_number();
-    QLabel* doc_in_number = new QLabel(data_doc_in_number);   // Входящий номер документа
-    QString data_d_o_number = "Исходящий № док-та: " + _data->get_doc_out_number();
-    QLabel* d_o_number = new QLabel(data_d_o_number);      // Исходящий № док-та
-    QString data_in_date = "Дата поступившего документа: " + _data->get_in_date().toString();
-    QLabel* in_date = new QLabel(data_in_date);         // Дата поступившего документа
-    QString data_send_rec = "Корреспондент (откуда поступил документ): " + _data->get_send_rec();
-    QLabel* send_rec = new QLabel(data_send_rec);        // Корреспондент (откуда поступил документ)
-    QString data_cont = "Краткое содержание: " + _data->get_content();
-    QLabel* cont = new QLabel(data_cont);            // Краткое содержание
-    QString data_recipient = "Кому передан документ: " + _data->get_recipient();
-    QLabel* recipient = new QLabel(data_recipient);       // Кому передан документ
-    QString data_reception_date = "Дата получения: " + _data->get_reception_date().toString();
-    QLabel* reception_date = new QLabel(data_reception_date);  // Дата получения
-    QString data_work = "Ответственный исполнитель: " + _data->get_worker();
-    QLabel* work = new QLabel(data_work);            // Ответственный исполнитель
-    QString date_reg_date = "Дата Регистрации: " + _data->get_sys_data().toString();
-    QLabel* reg_date = new QLabel(date_reg_date);
+    QLabel* doc_in_number = new QLabel(tr(("Входящий номер документа: " + _data->get_doc_in_number()).toUtf8()));         // Входящий номер документа
+    QLabel* d_o_number = new QLabel(tr(("Исходящий № док-та: " + _data->get_doc_out_number()).toUtf8()));                 // Исходящий № док-та
+    QLabel* in_date = new QLabel(tr(("Дата поступившего документа: " + _data->get_in_date().toString()).toUtf8()));       // Дата поступившего документа
+    QLabel* send_rec = new QLabel(tr(("Корреспондент (откуда поступил документ): " + _data->get_send_rec()).toUtf8()));   // Корреспондент (откуда поступил документ)
+    QLabel* cont = new QLabel(tr(("Краткое содержание: " + _data->get_content()).toUtf8()));                              // Краткое содержание
+    QLabel* recipient = new QLabel(tr(("Кому передан документ: " + _data->get_recipient()).toUtf8()));                    // Кому передан документ
+    QLabel* reception_date = new QLabel(tr(("Дата получения: " + _data->get_reception_date().toString()).toUtf8()));      // Дата получения
+    QLabel* work = new QLabel(tr(("Ответственный исполнитель: " + _data->get_worker()).toUtf8()));                        // Ответственный исполнитель
+    QLabel* reg_date = new QLabel(tr(("Дата Регистрации: " + _data->get_sys_data().toString()).toUtf8()));
 
-    QLabel *controllab = new QLabel("На контроле:");
+    QLabel *controllab = new QLabel(tr("На контроле:"));
     _controlbox = new QCheckBox();      // Поставлен ли на контроль
     if (_data->is_control()){
         _controlbox->setCheckState(Qt::Checked);
@@ -40,12 +31,12 @@ browser_letter_in::browser_letter_in(letter_in *arg, QWidget *parent) : QDialog(
     three_lay->addWidget(controllab);
     three_lay->addWidget(_controlbox);
 // Кнопка просмотра изображений
-        QPushButton *image_key = new QPushButton("Изображения...");
+        QPushButton *image_key = new QPushButton(tr("Изображения..."));
         QObject::connect(image_key, SIGNAL(clicked()), this, SLOT(slot_list_images()));
         three_lay->addSpacing(100);
         three_lay->addWidget(image_key);
 // Финальные кнопочки
-        QPushButton *ok_key = new QPushButton("Готово");
+        QPushButton *ok_key = new QPushButton(tr("Готово"));
         QObject::connect(ok_key, SIGNAL(clicked()), this, SLOT(slot_save()));
     main_lay->addLayout(one_lay);
     main_lay->addLayout(two_lay);

@@ -2,34 +2,27 @@
 
 browser_letter_out::browser_letter_out(letter_out *arg, QWidget *parent) : QDialog(parent)
 {
-    this->setWindowTitle("Исходящий документ:");
+    this->setWindowTitle(tr("Исходящий документ:"));
     this->setWindowIcon(QIcon(":/images/KlogoS.png"));
     _data =arg;
     QBoxLayout* main_lay = new QBoxLayout(QBoxLayout::TopToBottom);
-    QString data_d_o_number = "Исходящий № док-та: " + _data->get_doc_out_number();
-    QLabel* d_o_number = new QLabel(data_d_o_number);      // Исходящий № док-та
-    QString data_send_rec = "Корреспондент (кому направлен): " + _data->get_send_rec();
-    QLabel* send_rec = new QLabel(data_send_rec);        // Корреспондент (откуда поступил документ)
-    QString data_cont = "Краткое содержание: " + _data->get_content();
-    QLabel* cont = new QLabel(data_cont);            // Краткое содержание
-    QString data_work = "Ответственный исполнитель: " + _data->get_worker();
-    QLabel* work = new QLabel(data_work);            // Ответственный исполнитель
-    QString date_reg_date = "Дата Регистрации: " + _data->get_sys_data().toString();
-    QLabel* reg_date = new QLabel(date_reg_date);
-    QString data_blank_number = "Номер фирменного бланка: " + _data->get_blank_number();
-    QLabel* blank_number = new QLabel(data_blank_number);            // Номер фирменного бланка
-    QString data_notice = "Примечание: " + _data->get_notice();
-    QLabel* notice = new QLabel(data_notice);            // Примечание
+    QLabel* d_o_number = new QLabel(tr(("Исходящий № док-та: " + _data->get_doc_out_number()).toUtf8()));       // Исходящий № док-та
+    QLabel* send_rec = new QLabel(tr(("Корреспондент (кому направлен): " + _data->get_send_rec()).toUtf8()));   // Корреспондент (откуда поступил документ)
+    QLabel* cont = new QLabel(tr(("Краткое содержание: " + _data->get_content()).toUtf8()));                    // Краткое содержание
+    QLabel* work = new QLabel(tr(("Ответственный исполнитель: " + _data->get_worker()).toUtf8()));              // Ответственный исполнитель
+    QLabel* reg_date = new QLabel(tr(("Дата Регистрации: " + _data->get_sys_data().toString()).toUtf8()));
+    QLabel* blank_number = new QLabel(tr(("Номер фирменного бланка: " + _data->get_blank_number()).toUtf8()));  // Номер фирменного бланка
+    QLabel* notice = new QLabel(tr(("Примечание: " + _data->get_notice()).toUtf8()));                           // Примечание
 
     QBoxLayout* one_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QBoxLayout* three_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     one_lay->addWidget(blank_number);
     one_lay->addWidget(d_o_number);
 // Кнопка просмотра изображений
-        QPushButton *image_key = new QPushButton("Изображения...");
+        QPushButton *image_key = new QPushButton(tr("Изображения..."));
         QObject::connect(image_key, SIGNAL(clicked()), this, SLOT(slot_list_images()));
 // Финальные кнопочки
-        QPushButton *ok_key = new QPushButton("Готово");
+        QPushButton *ok_key = new QPushButton(tr("Готово"));
         QObject::connect(ok_key, SIGNAL(clicked()), this, SLOT(slot_save())); 
         three_lay->addWidget(ok_key);
         three_lay->addSpacing(100);

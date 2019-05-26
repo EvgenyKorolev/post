@@ -44,7 +44,7 @@ QVariant my_model_in::data(const QModelIndex &index, int role) const
         }
         if (index.column() == 8){
             if (_model_data->at(index.row()).is_control()){
-                return QVariant("Да");
+                return QVariant(tr("Да"));
             } return QVariant("-");
         }
     }
@@ -76,23 +76,23 @@ QVariant my_model_in::headerData(int section, Qt::Orientation orientation, int r
     if (role == Qt::DisplayRole && orientation == Qt::Horizontal){
         switch (section){
         case 0:
-            return QVariant("Входящий номер");
+            return QVariant(tr("Входящий номер"));
         case 1:
-            return QVariant("Номер (исходящий)");
+            return QVariant(tr("Номер (исходящий)"));
         case 2:
-            return QVariant("Дата документа");
+            return QVariant(tr("Дата документа"));
         case 3:
-            return QVariant("Откуда поступил документ");
+            return QVariant(tr("Откуда поступил документ"));
         case 4:
-            return QVariant("Краткое содержание");
+            return QVariant(tr("Краткое содержание"));
         case 5:
-            return QVariant("Кому передан документ");
+            return QVariant(tr("Кому передан документ"));
         case 6:
-            return QVariant("Дата получения");
+            return QVariant(tr("Дата получения"));
         case 7:
-            return QVariant("Ответственный исполнитель");
+            return QVariant(tr("Ответственный исполнитель"));
         case 8:
-            return QVariant("Контроль");
+            return QVariant(tr("Контроль"));
         }
     }
     return QVariant();
