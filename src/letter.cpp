@@ -18,15 +18,15 @@ letter::letter()
 }
 letter::letter(const letter &arg)
 {
-    _doc_out_number = arg.get_doc_out_number();
-    _send_rec = arg.get_send_rec();
-    _content = arg.get_content();
-    _worker = arg.get_worker();
-    _sys_data = arg.get_sys_data();
-    _fix = arg.is_fix();
-    _col = arg.get_col();
-    _image_list = arg.get_images_list();
-    _hash_label = arg.get_inv();
+    _doc_out_number = arg._doc_out_number;
+    _send_rec = arg._send_rec;
+    _content = arg._content;
+    _worker = arg._worker;
+    _sys_data = arg._sys_data;
+    _fix = arg._fix;
+    _col = arg._col;
+    _image_list = arg._image_list;
+    _hash_label = arg._hash_label;
 }
 letter::letter(const letter&& arg)
 {
@@ -42,15 +42,15 @@ letter::letter(const letter&& arg)
 }
 letter& letter::operator=(const letter& arg)
 {
-    _doc_out_number = arg.get_doc_out_number();
-    _send_rec = arg.get_send_rec();
-    _content = arg.get_content();
-    _worker = arg.get_worker();
-    _sys_data = arg.get_sys_data();
-    _fix = arg.is_fix();
-    _col = arg.get_col();
-    _image_list = arg.get_images_list();
-    _hash_label = arg.get_inv();
+    _doc_out_number = arg._doc_out_number;
+    _send_rec = arg._send_rec;
+    _content = arg._content;
+    _worker = arg._worker;
+    _sys_data = arg._sys_data;
+    _fix = arg._fix;
+    _col = arg._col;
+    _image_list = arg._image_list;
+    _hash_label = arg._hash_label;
     return *this;
 }
 letter& letter::operator=(letter&& arg)

@@ -18,7 +18,7 @@
 class doc_image
 {
 public:
-    doc_image(img_status ims);
+    explicit doc_image(img_status ims);
     doc_image(const QImage &arg, const QString &adr, const QString &arg_number, img_status ims);
     bool set_image(const QImage &arg, const QString &adr,  const QString& number, img_status ims);
     void set_adr(const QString& arg);

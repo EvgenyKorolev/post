@@ -18,7 +18,7 @@ class editor_letter_out : public QDialog
 {
     Q_OBJECT
 public:
-    editor_letter_out(letter_out* arg, QWidget *pather = 0);
+    editor_letter_out(letter_out* arg, QWidget *pather = nullptr);
     ~editor_letter_out();
     letter_out* result();
 private:

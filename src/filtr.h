@@ -18,7 +18,7 @@ class filtr : public QDialog
 {
     Q_OBJECT
 public:
-    filtr(QString arg);
+    explicit filtr(QString arg);
     void set_def(QString arg);
     QString result_type();
     QString result_field();
