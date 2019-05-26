@@ -17,7 +17,7 @@
 class proxy_out
 {
 public:
-    proxy_out(QSqlDatabase *arg);
+    explicit proxy_out(QSqlDatabase *arg);
     ~proxy_out();
     int size() const;
     int count() const;

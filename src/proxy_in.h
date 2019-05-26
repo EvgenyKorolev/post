@@ -19,7 +19,7 @@
 class proxy_in
 {
 public:
-    proxy_in(QSqlDatabase *arg);
+    explicit proxy_in(QSqlDatabase *arg);
     ~proxy_in();
     int size() const;
     int count() const;

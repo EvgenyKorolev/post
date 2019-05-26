@@ -14,40 +14,32 @@ letter_in::letter_in()
     _recipient = "";
     _reception_date = QDate(0,0,0);
     _control = false;
-    //_image_list() = QList<doc_image*>();
 }
-letter_in::letter_in(const letter_in &arg)
+letter_in::letter_in(const letter_in &arg) : letter (arg)
 {
-    _doc_out_number = arg.get_doc_out_number();
-    _send_rec = arg.get_send_rec();
-    _content = arg.get_content();
-    _worker = arg.get_worker();
-    _sys_data = arg.get_sys_data();
-    _fix = arg.is_fix();
-    _col = arg.get_col();
-    _doc_in_number = arg.get_doc_in_number();
-    _in_date = arg.get_in_date();
-    _recipient = arg.get_recipient();
-    _reception_date = arg.get_reception_date();
-    _control = arg.is_control();
-    _hash_label = arg.get_inv();
-    _image_list = arg.get_images_list();
+    _col = arg._col;
+    _doc_in_number = arg._doc_in_number;
+    _in_date = arg._in_date;
+    _recipient = arg._recipient;
+    _reception_date = arg._reception_date;
+    _control = arg._control;
 }
 letter_in &letter_in::operator=(const letter_in &arg)
 {
-    _doc_out_number = arg.get_doc_out_number();
-    _send_rec = arg.get_send_rec();
-    _content = arg.get_content();
-    _worker = arg.get_worker();
-    _sys_data = arg.get_sys_data();
-    _fix = arg.is_fix();
-    _col = arg.get_col();
-    _doc_in_number = arg.get_doc_in_number();
-    _in_date = arg.get_in_date();
-    _recipient = arg.get_recipient();
-    _reception_date = arg.get_reception_date();
-    _hash_label = arg.get_inv();
-    _image_list = arg.get_images_list();
+    _doc_out_number = arg._doc_out_number;
+    _send_rec = arg._send_rec;
+    _content = arg._content;
+    _worker = arg._worker;
+    _sys_data = arg._sys_data;
+    _fix = arg._fix;
+    _col = arg._col;
+    _doc_in_number = arg._doc_in_number;
+    _in_date = arg._in_date;
+    _recipient = arg._recipient;
+    _reception_date = arg._reception_date;
+    _hash_label = arg._hash_label;
+    _image_list = arg._image_list;
+    _control = arg._control;
     return *this;
 }
 QString letter_in::get_doc_in_number() const

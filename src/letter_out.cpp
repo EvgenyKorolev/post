@@ -13,33 +13,24 @@ letter_out::letter_out()
     _col = 6;
     _image_list = QList<doc_image*>();
 }
-letter_out::letter_out(const letter_out &arg)
+letter_out::letter_out(const letter_out &arg) : letter (arg)
 {
-    _blank_number = arg.get_blank_number();
-    _notice = arg.get_notice();
-    _doc_out_number = arg.get_doc_out_number();
-    _send_rec = arg.get_send_rec();
-    _content = arg.get_content();
-    _worker = arg.get_worker();
-    _sys_data = arg.get_sys_data();
-    _fix = arg.is_fix();
-    _col = arg.get_col();
-    _hash_label = arg.get_inv();
-    _image_list = arg.get_images_list();
+    _blank_number = arg._blank_number;
+    _notice = arg._notice;
 }
 letter_out &letter_out::operator=(const letter_out &arg)
 {
-    _blank_number = arg.get_blank_number();
-    _notice = arg.get_notice();
-    _doc_out_number = arg.get_doc_out_number();
-    _send_rec = arg.get_send_rec();
-    _content = arg.get_content();
-    _worker = arg.get_worker();
-    _sys_data = arg.get_sys_data();
-    _fix = arg.is_fix();
-    _col = arg.get_col();
-    _hash_label = arg.get_inv();
-    _image_list = arg.get_images_list();
+    _blank_number = arg._blank_number;
+    _notice = arg._notice;
+    _doc_out_number = arg._doc_out_number;
+    _send_rec = arg._send_rec;
+    _content = arg._content;
+    _worker = arg._worker;
+    _sys_data = arg._sys_data;
+    _fix = arg._fix;
+    _col = arg._col;
+    _hash_label = arg._hash_label;
+    _image_list = arg._image_list;
     return *this;
 }
 QString letter_out::get_blank_number() const

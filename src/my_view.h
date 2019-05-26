@@ -19,7 +19,7 @@ class my_view : public QTableView
 {
     Q_OBJECT
 public:
-    my_view(QWidget *par = nullptr);
+   explicit  my_view(QWidget *par = nullptr);
     void mousePressEvent(QMouseEvent *arg);
     void mouseDoubleClickEvent(QMouseEvent* arg);
 public slots:
