@@ -68,6 +68,9 @@ HEADERS  += \
 RESOURCES += \
     res.qrc
 
+TRANSLATIONS += post_ru.ts
+TRANSLATIONS += post_en.ts
+
 win32:{
     RC_ICONS = $$PWD/images/k.ico
     VERSION = 0.9.9

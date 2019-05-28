@@ -1,6 +1,9 @@
 #include "doc_image.h"
+#include "functions.h"
 
+#include <QDir>
 #include <QObject>
+#include <QDateTime>
 
 doc_image::doc_image(img_status ims)
 {
@@ -12,48 +15,17 @@ doc_image::doc_image(img_status ims)
 }
 doc_image::doc_image(const QImage &arg, const QString& adr, const QString& arg_number, img_status ims)
 {
-    set_type(ims);
-    QString tmp1;
-    tmp1.append(adr.at(0));
-    tmp1.append(adr.at(1));
-    QString tmp2;
-    tmp2.append(type.at(0));
-    tmp2.append(type.at(1));
-    if (tmp1 == tmp2){
-        _adr_str = adr;
-    } else {
-        _adr_str = type + "_" + adr;
-    }
-    number_doc = arg_number;
-    settings& setd = settings::getInatance();
-    QSqlDatabase& my_db = setd.get_db();
-    QSqlQuery query(my_db);
-    QString tmp_query;
-        _uniq_str = "file";
-        hash = im_hash(arg);
-        arg.save(setd.get_img_dir() + _adr_str + ".png", "png");
-        if (type == "out"){
-            tmp_query = "INSERT INTO out_foto(label_uniq, adr_str, uniq_str, im_hash) VALUES('" + number_doc + "', '" + _adr_str + "', '" + _uniq_str + "', '" + hash + "');";
-        } else if (type == "in"){
-            tmp_query = "INSERT INTO in_foto(label_uniq, adr_str, uniq_str, im_hash) VALUES('" + number_doc + "', '" + _adr_str + "', '" + _uniq_str +"', '" + hash + "');";
-        }
-        if (!query.exec(tmp_query)){
-            QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("Что-то не то с сохранением doc_image"));
-        }
+    set_image(arg, adr, arg_number, ims);
 }
+
 bool doc_image::set_image(const QImage& arg, const QString& adr, const QString& number, img_status ims)
 {
     set_type(ims);
-    QString tmp1;
-    tmp1.append(adr.at(0));
-    tmp1.append(adr.at(1));
-    QString tmp2;
-    tmp2.append(type.at(0));
-    tmp2.append(type.at(1));
-    if (tmp1 == tmp2){
+    if (adr.split("/").size() == 2){
+        _adr_str = adr.split("/").at(0) + "/" + type + "_" + adr.split("/").at(1);
+    }
+    else {
         _adr_str = adr;
-    } else {
-        _adr_str = type + "_" + adr;
     }
     number_doc = number;
     settings& setd = settings::getInatance();
@@ -62,13 +34,17 @@ bool doc_image::set_image(const QImage& arg, const QString& adr, const QString& 
     _uniq_str = "file";
     hash = im_hash(arg);
     QString tmp_query;
+    if (_adr_str.split("/").size() == 2)
+    {
+        QDir().mkpath(setd.get_img_dir() + _adr_str.split("/").at(0));
+    }
     arg.save(setd.get_img_dir() + _adr_str + ".png", "png");
     if (type == "out"){
-        tmp_query = "INSERT INTO out_foto(label_uniq TEXT, adr_str TEXT, uniq_str TEXT, im_hash TEXT) VALUES ('" + number_doc + "', '" +
-                _adr_str + "', '" + _uniq_str + "', '" + hash + "');";
+        tmp_query = "INSERT INTO out_foto(label_uniq, adr_str, uniq_str, im_hash) VALUES ('" + number_doc + "', '" +
+                my::base64_plus(_adr_str) + "', '" + _uniq_str + "', '" + hash + "');";
     } else if (type == "in"){
-        tmp_query = "INSERT INTO in_foto(label_uniq TEXT, adr_str TEXT, uniq_str TEXT, im_hash TEXT) VALUES ('" + number_doc + "', '" +
-                   _adr_str + "', '" + _uniq_str + "', '" + hash + "');";
+        tmp_query = "INSERT INTO in_foto(label_uniq, adr_str, uniq_str, im_hash) VALUES ('" + number_doc + "', '" +
+                   my::base64_plus(_adr_str) + "', '" + _uniq_str + "', '" + hash + "');";
     }
     if (!query.exec(tmp_query)){
         QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("Что-то не то с сохранением img_set"));
@@ -76,6 +52,7 @@ bool doc_image::set_image(const QImage& arg, const QString& adr, const QString& 
     }
     return true;
 }
+
 QImage doc_image::get_image() const
 {
     settings& setd = settings::getInatance();
@@ -85,9 +62,9 @@ QImage doc_image::get_image() const
     QString tmp_query;
     QSqlRecord rec;
     if (type == "out"){
-        tmp_query = "SELECT * FROM out_foto WHERE adr_str = '" + _adr_str + "';";
+        tmp_query = "SELECT * FROM out_foto WHERE adr_str = '" + my::base64_plus(_adr_str) + "';";
     } else if (type == "in"){
-        tmp_query = "SELECT * FROM in_foto WHERE adr_str = '" + _adr_str + "';";
+        tmp_query = "SELECT * FROM in_foto WHERE adr_str = '" + my::base64_plus(_adr_str) + "';";
     }
     query.exec(tmp_query);
     if (!query.exec(tmp_query)){
@@ -118,9 +95,9 @@ void doc_image::del_image()
         QSqlDatabase& my_db = setd.get_db();
         QSqlQuery query(my_db);
         if (type == "out"){
-            query.exec("DELETE FROM out_foto WHERE adr_str = '" + _adr_str + "';");
+            query.exec("DELETE FROM out_foto WHERE adr_str = '" + my::base64_plus(_adr_str) + "';");
         } else if (type == "in"){
-            query.exec("DELETE FROM in_foto WHERE adr_str = '" + _adr_str + "';");
+            query.exec("DELETE FROM in_foto WHERE adr_str = '" + my::base64_plus(_adr_str) + "';");
         }
         _uniq_str = "";
         _adr_str ="";
@@ -172,16 +149,11 @@ void doc_image::set_uniq(const QString& arg)
 }
 void doc_image::set_adr(const QString& arg)
 {
-    QString tmp1;
-    tmp1.append(arg.at(0));
-    tmp1.append(arg.at(1));
-    QString tmp2;
-    tmp2.append(type.at(0));
-    tmp2.append(type.at(1));
-    if (tmp1 == tmp2){
+    if (arg.split("/").size() == 2){
         _adr_str = arg;
     } else {
-        _adr_str = type + "_" + arg;
+        auto tmp = arg.split("/");
+        _adr_str = tmp.at(0) + type + "_" + tmp.at(1);
     }
 }
 QString doc_image::get_adr() const

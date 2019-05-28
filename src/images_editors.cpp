@@ -107,7 +107,7 @@ void images_editors::slot_add()
     QString str = QFileDialog::getOpenFileName(nullptr, tr("Выберите изображение"), "", "*.jpg");
     if (str == "") return;
     QImage add_img = QImage(str, "jpg");
-    doc_image* tmp = new doc_image(add_img, number + QString::number(_data_str.count()), number, img_st);
+    doc_image* tmp = new doc_image(add_img, QString::number(QDateTime::currentDateTime().date().day()) + "/" + number + QString::number(_data_str.count()), number, img_st);
      _data_str.append(tmp);
      _focus = _data_str.size() - 1;
      this->view_img(_focus);

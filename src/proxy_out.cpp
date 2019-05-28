@@ -52,7 +52,7 @@ letter_out proxy_out::at(int arg) const
     rec = query.record();
     while (query.next()){
         doc_image* tmp = new doc_image(img_status::out_foto);
-        tmp->set_adr(query.value(rec.indexOf("adr_str")).toString());
+        tmp->set_adr(my::base64_minus(query.value(rec.indexOf("adr_str")).toString()));
         tmp->set_uniq(query.value(rec.indexOf("uniq_str")).toString());
         tmp->set_number_doc(query.value(rec.indexOf("label_uniq")).toString());
         ret.add_images(tmp);

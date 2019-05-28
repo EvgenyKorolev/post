@@ -20,7 +20,6 @@ class doc_image
 public:
     explicit doc_image(img_status ims);
     doc_image(const QImage &arg, const QString &adr, const QString &arg_number, img_status ims);
-    bool set_image(const QImage &arg, const QString &adr,  const QString& number, img_status ims);
     void set_adr(const QString& arg);
     void set_uniq(const QString& arg);
     void set_number_doc(const QString& arg);
@@ -31,6 +30,7 @@ public:
     QImage get_image() const;
     void del_image();
 private:
+    bool set_image(const QImage &arg, const QString &adr,  const QString& number, img_status ims);
     void set_type(img_status ims);
     QString im_hash(const QImage &arg) const;
     QString _adr_str{""};
