@@ -73,17 +73,22 @@ void settings::prepare_database()
     QString tmpQueryOut = "SELECT * FROM out_foto;";
     QString tmpQueryIn = "SELECT * FROM in_foto;";
     QString tmpQuery;
-    QList<QPair<QString, QString>> dataList;
+    QList<StringUnit> dataList;
+    StringUnit tmpUnit;
     query.exec(tmpQueryOut);
     if (query.exec(tmpQueryOut)){
         tmpRecord = query.record();
         while (query.next()){
             tmpRecord = query.record();
-            dataList.append(QPair(query.value(tmpRecord.indexOf("label_uniq")).toString(), query.value(tmpRecord.indexOf("adr_str")).toString()));
+            tmpUnit.m_labelUniq = query.value(tmpRecord.indexOf("label_uniq")).toString();
+            tmpUnit.m_adrStr = query.value(tmpRecord.indexOf("adr_str")).toString();
+            tmpUnit.m_hash = query.value(tmpRecord.indexOf("im_hash")).toString();
+            dataList.append(tmpUnit);
         }
         auto it = dataList.cbegin();
         while (it != dataList.cend()){
-            tmpQuery = "UPDATE out_foto SET adr_str = '" + my::base64_plus(it->second) + "' WHERE label_uniq = '" + it->first + "';";
+            tmpQuery = "UPDATE out_foto SET adr_str = '" + my::base64_plus(it->m_adrStr) +
+                    "' WHERE label_uniq = '" + it->m_labelUniq + "' AND im_hash = '" + it->m_hash + "';";
             query.exec(tmpQuery);
             ++it;
         }
@@ -94,11 +99,15 @@ void settings::prepare_database()
         tmpRecord = query.record();
         while (query.next()){
             tmpRecord = query.record();
-            dataList.append(QPair(query.value(tmpRecord.indexOf("label_uniq")).toString(), query.value(tmpRecord.indexOf("adr_str")).toString()));
+            tmpUnit.m_labelUniq = query.value(tmpRecord.indexOf("label_uniq")).toString();
+            tmpUnit.m_adrStr = query.value(tmpRecord.indexOf("adr_str")).toString();
+            tmpUnit.m_hash = query.value(tmpRecord.indexOf("im_hash")).toString();
+            dataList.append(tmpUnit);
         }
         auto it = dataList.cbegin();
         while (it != dataList.cend()){
-            tmpQuery = "UPDATE in_foto SET adr_str = '" + my::base64_plus(it->second) + "' WHERE label_uniq = '" + it->first + "';";
+            tmpQuery = "UPDATE in_foto SET adr_str = '" + my::base64_plus(it->m_adrStr) +
+                    "' WHERE label_uniq = '" + it->m_labelUniq + "' AND im_hash = '" + it->m_hash + "';";
             query.exec(tmpQuery);
             ++it;
         }

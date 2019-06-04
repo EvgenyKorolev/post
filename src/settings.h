@@ -4,6 +4,13 @@
 #include <QString>
 #include <QSqlDatabase>
 
+struct StringUnit
+{
+    QString m_adrStr;
+    QString m_labelUniq;
+    QString m_hash;
+};
+
 class settings
 {
 public:
