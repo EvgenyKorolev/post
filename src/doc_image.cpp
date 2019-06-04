@@ -149,12 +149,7 @@ void doc_image::set_uniq(const QString& arg)
 }
 void doc_image::set_adr(const QString& arg)
 {
-    if (arg.split("/").size() == 2){
         _adr_str = arg;
-    } else {
-        auto tmp = arg.split("/");
-        _adr_str = tmp.at(0) + type + "_" + tmp.at(1);
-    }
 }
 QString doc_image::get_adr() const
 {

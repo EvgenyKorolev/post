@@ -1,8 +1,17 @@
 #include "settings.h"
+#include "functions.h"
 
+#include <QDir>
+#include <QFile>
 #include <QObject>
+#include <QSqlQuery>
+#include <QDateTime>
+#include <QSqlRecord>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QTextStream>
 
-settings::settings()
+settings::settings() : m_currentVersion{"ver_1_0"}
 {
     QDir us_dir;
     us_dir.mkdir(QDir::homePath() + "/.post");
@@ -32,6 +41,16 @@ settings::settings()
     _db = QSqlDatabase::addDatabase("QSQLITE");
     _db.setDatabaseName(_db_dir);
     if(!_db.open()){ QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("База данных не открывается data.db3"));}
+    QSqlQuery query(_db);
+    QSqlRecord tmpRecord;
+    QString prep = "SELECT * FROM versions WHERE version_id = 'current_version';";
+    if (!query.exec(prep)) {
+        prepare_database();
+    }
+    else {
+        tmpRecord = query.record();
+        QString refer = query.value(tmpRecord.indexOf("version_number")).toString();
+    }
 }
 QString settings::get_img_dir() const
 {
@@ -45,6 +64,55 @@ QSqlDatabase& settings::get_db()
 {
     return _db;
 }
+
+void settings::prepare_database()
+{
+    QFile::copy(_db_dir, _db_dir + QDateTime::currentDateTime().toString("_dd_MM_yyyy_HH_mm") +".bak");
+    QSqlQuery query(_db);
+    QSqlRecord tmpRecord;
+    QString tmpQueryOut = "SELECT * FROM out_foto;";
+    QString tmpQueryIn = "SELECT * FROM in_foto;";
+    QString tmpQuery;
+    QList<QPair<QString, QString>> dataList;
+    query.exec(tmpQueryOut);
+    if (query.exec(tmpQueryOut)){
+        tmpRecord = query.record();
+        while (query.next()){
+            tmpRecord = query.record();
+            dataList.append(QPair(query.value(tmpRecord.indexOf("label_uniq")).toString(), query.value(tmpRecord.indexOf("adr_str")).toString()));
+        }
+        auto it = dataList.cbegin();
+        while (it != dataList.cend()){
+            tmpQuery = "UPDATE out_foto SET adr_str = '" + my::base64_plus(it->second) + "' WHERE label_uniq = '" + it->first + "';";
+            query.exec(tmpQuery);
+            ++it;
+        }
+    }
+    query.exec(tmpQueryIn);
+    dataList.clear();
+    if (query.exec(tmpQueryIn)){
+        tmpRecord = query.record();
+        while (query.next()){
+            tmpRecord = query.record();
+            dataList.append(QPair(query.value(tmpRecord.indexOf("label_uniq")).toString(), query.value(tmpRecord.indexOf("adr_str")).toString()));
+        }
+        auto it = dataList.cbegin();
+        while (it != dataList.cend()){
+            tmpQuery = "UPDATE in_foto SET adr_str = '" + my::base64_plus(it->second) + "' WHERE label_uniq = '" + it->first + "';";
+            query.exec(tmpQuery);
+            ++it;
+        }
+    }
+    tmpQuery = "CREATE TABLE versions (version_id TEXT, version_number TEXT);";
+        if (!query.exec(tmpQuery)) {
+            QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("База данных пуста и не удается создать таблицу versions"));
+        }
+    tmpQuery = "INSERT INTO versions(version_id, version_number) VALUES ('current_version', '" + m_currentVersion + "');";
+        if (!query.exec(tmpQuery)) {
+            QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("Не удаётся записать номер версии"));
+        }
+}
+
 void settings::create_base()
 {
     QDir my_dir(db_path);
@@ -64,14 +132,23 @@ void settings::create_base()
                 QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("База данных пуста и не удается создать таблицу out_data"));
             }
 // doc_out TEXT - номер документа, adr_str TEXT - имя файла, uniq_str - тип хранения (пока свободно), im_hash TEXT - хэш картинки
-       QString prep2 = "CREATE TABLE out_foto (label_uniq TEXT, adr_str TEXT, uniq_str TEXT, im_hash TEXT, inq INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL);";
-            if (!query.exec(prep2)) {
+        prep = "CREATE TABLE out_foto (label_uniq TEXT, adr_str TEXT, uniq_str TEXT, im_hash TEXT, inq INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL);";
+            if (!query.exec(prep)) {
                 QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("База данных пуста и не удается создать таблицу out_foto"));
             }
-        prep2 = "CREATE TABLE in_foto (label_uniq TEXT, adr_str TEXT, uniq_str TEXT, im_hash TEXT, inq INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL);";
-            if (!query.exec(prep2)) {
+        prep = "CREATE TABLE in_foto (label_uniq TEXT, adr_str TEXT, uniq_str TEXT, im_hash TEXT, inq INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL);";
+            if (!query.exec(prep)) {
                 QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("База данных пуста и не удается создать таблицу in_foto"));
             }
+
+            prep = "CREATE TABLE versions (version_id TEXT, version_number TEXT);";
+                if (!query.exec(prep)) {
+                    QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("База данных пуста и не удается создать таблицу versions"));
+                }
+            prep = "INSERT INTO versions(version_id, version_number) VALUES ('current_version', '" + m_currentVersion + "');";
+                if (!query.exec(prep)) {
+                    QMessageBox::information(nullptr, QObject::tr("Внимание"), QObject::tr("Не удаётся записать номер версии"));
+                }
     temp_db.close();
 }
 QString settings::choise_set_path()
