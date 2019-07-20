@@ -2,26 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QSqlDatabase>
-#include <QList>
 #include <QWidget>
-#include <QBoxLayout>
 #include <QMdiArea>
-#include <QHeaderView>
-#include <QToolBar>
-#include <QMenuBar>
 #include <QMenu>
 #include <QAction>
-#include <QScrollBar>
-#include <QMdiSubWindow>
-#include <QSortFilterProxyModel>
-#include <QRegExp>
-#include <QFile>
-#include <QPrinter>
-#include <QPrintDialog>
-#include <QTextDocument>
-#include <QTextStream>
-#include <QEvent>
 #include "settings.h"
 #include "items_fabrica.h"
 #include "letter_in.h"
@@ -48,6 +32,7 @@ public slots:
     void slot_print();
     void slot_set();
     void slot_help();
+    void slot_languege();
 private:
     QString _type_view;
     proxy_in* _prin;
@@ -64,6 +49,7 @@ private:
     QAction* _act_about;
     QAction* _act_set;
     QAction* _act_help;
+    QAction* _act_languege;
     QToolBar* _in_work_panel;
     QToolBar* _out_work_panel;
 };

@@ -1,5 +1,10 @@
 #include "yes_no.h"
 
+#include <QIcon>
+#include <QLabel>
+#include <QBoxLayout>
+#include <QPushButton>
+
 yes_no::yes_no(const QString &arg1, const QString &arg2, QWidget *parent) : QDialog (parent)
 {
     this->setWindowTitle(arg1);

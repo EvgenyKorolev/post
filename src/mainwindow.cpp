@@ -1,5 +1,23 @@
 #include "mainwindow.h"
+#include "languegemenu.h"
+
 #include <QHeaderView>
+#include <QSortFilterProxyModel>
+#include <QRegExp>
+#include <QFile>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QTextDocument>
+#include <QTextStream>
+#include <QEvent>
+#include <QSqlDatabase>
+#include <QList>
+#include <QBoxLayout>
+#include <QHeaderView>
+#include <QToolBar>
+#include <QMenuBar>
+#include <QScrollBar>
+#include <QMdiSubWindow>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -66,6 +84,7 @@ MainWindow::MainWindow(QWidget *parent)
     _act_close_filtr = new QAction(nullptr);
     _act_set = new QAction(nullptr);
     _act_help = new QAction(nullptr);
+    _act_languege = new QAction(nullptr);
     _act_add->setIcon(QIcon(":/images/folder-add.png"));
     _act_add->setToolTip(tr("Добавить документ"));
     _act_filtr->setIcon(QIcon(":/images/zoom.png"));
@@ -80,6 +99,9 @@ MainWindow::MainWindow(QWidget *parent)
     _act_set->setToolTip(tr("Настройка"));
     _act_help->setIcon(QIcon(":/images/help.png"));
     _act_help->setToolTip(tr("Справка"));
+    _act_help->setIcon(QIcon(":/images/help.png"));
+    _act_languege->setToolTip(tr("Язык"));
+    _act_languege->setIcon(QIcon(":/images/len.png"));
 
     QObject::connect(_act_about, SIGNAL(triggered(bool)), this, SLOT(slot_about()));
     QObject::connect(_act_add, SIGNAL(triggered(bool)), this, SLOT(slot_add()));
@@ -88,6 +110,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(_act_close_filtr, SIGNAL(triggered(bool)), this, SLOT(slot_close_filtr()));
     QObject::connect(_act_set, SIGNAL(triggered(bool)), this, SLOT(slot_set()));
     QObject::connect(_act_help, SIGNAL(triggered(bool)), this, SLOT(slot_help()));
+    QObject::connect(_act_help, SIGNAL(triggered(bool)), this, SLOT(slot_languege()));
 
     _in_work_panel = new QToolBar();
     _out_work_panel = new QToolBar();
@@ -110,6 +133,8 @@ MainWindow::MainWindow(QWidget *parent)
     _in_work_panel->addSeparator();
     _in_work_panel->addAction(_act_help);
     _in_work_panel->addSeparator();
+    _in_work_panel->addAction(_act_languege);
+    _in_work_panel->addSeparator();
     _out_work_panel->addSeparator();
     _out_work_panel->addAction(_act_add);
     _out_work_panel->addSeparator();
@@ -124,6 +149,8 @@ MainWindow::MainWindow(QWidget *parent)
     _out_work_panel->addAction(_act_set);
     _out_work_panel->addSeparator();
     _out_work_panel->addAction(_act_help);
+    _out_work_panel->addSeparator();
+    _out_work_panel->addAction(_act_languege);
     _out_work_panel->addSeparator();
 
     _inview->scrollToBottom();
@@ -149,7 +176,7 @@ MainWindow::~MainWindow()
 }
 void MainWindow::slot_active_window()
 {
-    if (_main_area->activeSubWindow() == nullptr || _main_area->activeSubWindow() == nullptr) return;
+    if (_main_area->activeSubWindow() == nullptr) return;
     if (_main_area->activeSubWindow()->windowTitle() == tr("Входящие документы")) {
         _out_work_panel->hide();
         _in_work_panel->show();
@@ -312,12 +339,12 @@ void MainWindow::slot_print()
 void MainWindow::slot_set()
 {
     yes_no* pmbx = new yes_no(tr("Настройка"),
-                        "<HTML><HEAD><BODY><p align='center'><b>Внимание!</b></p><br>"
+                        tr("<HTML><HEAD><BODY><p align='center'><b>Внимание!</b></p><br>"
                         "Данная функция предназначена для указания пути к каталогу post с базой <br>"
                         "данных приложения (каталоги docs и data) в случае если он был перемещён.<br> "
                         "Если вы укажите пустой каталог, то будет создана новая база объединение<br>"
                         "которой с предидущей базой будет невозможно. Можно будет снова выбрать<br>"
-                        "предыдущую базу, но документы внесённую в новую перенесены не будут.<br></BODY></HEAD></HTML>",
+                        "предыдущую базу, но документы внесённую в новую перенесены не будут.<br></BODY></HEAD></HTML>"),
                         this);
     if (pmbx->exec() == QDialog::Accepted)
     {
@@ -330,7 +357,7 @@ void MainWindow::slot_set()
 void MainWindow::slot_help()
 {
     QMessageBox about;
-    about.setText("<p align=\"center\"><b>Назначения кнопок панели управления:<b><br></p>"
+    about.setText(tr("<p align=\"center\"><b>Назначения кнопок панели управления:<b><br></p>"
                   "<table style=\"margin-right: auto; margin-left: auto; height: 286px; width: 800px;\" border=\"1\">"
                      "<tbody>"
                           "<tr>"
@@ -368,6 +395,11 @@ void MainWindow::slot_help()
                       "</td>"
                       "<td>&nbsp;Показать эту справку.</td>"
                   "</tr>"
+                     "<tr>"
+                         "<td><img src=\":/images/len.png\" width=\"40\" height=\"40\" align=\"middle\" />"
+                         "</td>"
+                         "<td>Выбор языка</td>"
+                     "</tr>"
                           "<tr>"
                               "<td><img src=\":/images/info-large.png\" />"
                               "</td>"
@@ -375,8 +407,13 @@ void MainWindow::slot_help()
                           "</tr>"
                       "</tbody>"
                   "</table><br>"
-                  "<p align=\"center\">Более подробную справку можно найти на <a href=\"http://kyrych.ru/44-dev/app/158-post\">kyrych.ru</a></p><br>");
+                  "<p align=\"center\">Более подробную справку можно найти на <a href=\"http://kyrych.ru/44-dev/app/158-post\">kyrych.ru</a></p><br>"));
     about.setWindowIcon(QIcon(":/images/KlogoS.png"));
     about.setWindowTitle(tr("Справка:"));
     about.exec();
+}
+
+void MainWindow::slot_languege()
+{
+
 }

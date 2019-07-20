@@ -3,10 +3,6 @@
 
 #include <QObject>
 #include <QDialog>
-#include <QIcon>
-#include <QBoxLayout>
-#include <QPushButton>
-#include <QLabel>
 
 class yes_no : public QDialog
 {
