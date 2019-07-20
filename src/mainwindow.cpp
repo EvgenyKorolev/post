@@ -110,7 +110,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(_act_close_filtr, SIGNAL(triggered(bool)), this, SLOT(slot_close_filtr()));
     QObject::connect(_act_set, SIGNAL(triggered(bool)), this, SLOT(slot_set()));
     QObject::connect(_act_help, SIGNAL(triggered(bool)), this, SLOT(slot_help()));
-    QObject::connect(_act_help, SIGNAL(triggered(bool)), this, SLOT(slot_languege()));
+    QObject::connect(_act_languege, SIGNAL(triggered(bool)), this, SLOT(slot_languege()));
 
     _in_work_panel = new QToolBar();
     _out_work_panel = new QToolBar();
@@ -415,5 +415,10 @@ void MainWindow::slot_help()
 
 void MainWindow::slot_languege()
 {
+    LanguegeMenu* pmbl = new LanguegeMenu(this);
+    if (pmbl->exec() == QDialog::Accepted)
+    {
 
+    }
+    delete pmbl;
 }

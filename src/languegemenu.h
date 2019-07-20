@@ -1,9 +1,9 @@
 #ifndef LANGUEGEMENU_H
 #define LANGUEGEMENU_H
 
-#include <QWidget>
+#include <QDialog>
 
-class LanguegeMenu : public QWidget
+class LanguegeMenu : public QDialog
 {
     Q_OBJECT
 public:
