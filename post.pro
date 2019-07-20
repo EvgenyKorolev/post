@@ -27,6 +27,7 @@ SOURCES += \
     src/images_browser.cpp \
     src/images_editors.cpp \
     src/items_fabrica.cpp \
+    src/languegemenu.cpp \
     src/letter.cpp \
     src/letter_in.cpp \
     src/letter_out.cpp \
@@ -51,6 +52,7 @@ HEADERS  += \
     src/images_browser.h \
     src/images_editors.h \
     src/items_fabrica.h \
+    src/languegemenu.h \
     src/letter.h \
     src/letter_in.h \
     src/letter_out.h \

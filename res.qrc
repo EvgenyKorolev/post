@@ -22,5 +22,6 @@
         <file>images/warning.png</file>
         <file>images/cog-outline.png</file>
         <file>images/help.png</file>
+        <file>images/len.png</file>
     </qresource>
 </RCC>
