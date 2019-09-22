@@ -2,17 +2,13 @@
 #define EDITOR_LETTER_OUT_H
 
 #include <QObject>
-#include <QDialog>
-#include <QBoxLayout>
-#include <QPushButton>
-#include <QCheckBox>
-#include <QLineEdit>
-#include <QDateEdit>
-#include <QTextEdit>
-#include <QLabel>
-#include <QMessageBox>
 #include "images_editors.h"
-#include "letter_out.h"
+
+class QLineEdit;
+class QDateEdit;
+class QTextEdit;
+class QCheckBox;
+class letter_out;
 
 class editor_letter_out : public QDialog
 {

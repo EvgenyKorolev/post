@@ -1,34 +1,41 @@
 #include "editor_letter_in.h"
+#include "letter_in.h"
+
+#include <QDialog>
+#include <QLayout>
+#include <QLabel>
+#include <QBoxLayout>
+#include <QPushButton>
+#include <QMessageBox>
+#include <QDateEdit>
+#include <QLineEdit>
+#include <QTextEdit>
+#include <QCheckBox>
 
 editor_letter_in::editor_letter_in(letter_in *arg, QWidget *parent) : QDialog(parent)
 {
     _data = arg;
     this->setWindowTitle(tr("Входящий документ:"));
     this->setWindowIcon(QIcon(":/images/KlogoS.png"));
+    QGridLayout *formLayout = new QGridLayout(this);
 // Входящий номер документа
     QLabel *numlab = new QLabel();
         numlab->setText(tr("Входящий номер: "));
         numlab->setMinimumWidth(90);
-        numlab->setMaximumWidth(90);
         _doc_in_number = new QLineEdit();
         _doc_in_number->setText(_data->get_doc_in_number());
         _doc_in_number->setMinimumWidth(200);
-        _doc_in_number->setMaximumWidth(200);
-    QBoxLayout *num_lay = new QBoxLayout(QBoxLayout::LeftToRight);
-        num_lay->addWidget(numlab);
-        num_lay->addWidget(_doc_in_number);
 // Исходящий № док-та
     QLabel *innumlab = new QLabel();
         innumlab->setText(tr("Исходящий № док-та: "));
         innumlab->setMinimumWidth(115);
-        innumlab->setMaximumWidth(115);
         _d_o_number = new QLineEdit();
         _d_o_number->setText(_data->get_doc_out_number());
         _d_o_number->setMinimumWidth(200);
-        _d_o_number->setMaximumWidth(200);
-        num_lay->addWidget(innumlab);
-        num_lay->addWidget(_d_o_number);
-        num_lay->addStretch();
+        formLayout->addWidget(numlab, 0, 0);
+        formLayout->addWidget(_doc_in_number, 0, 1);
+        formLayout->addWidget(innumlab, 0, 2);
+        formLayout->addWidget(_d_o_number, 0, 3);
 // Дата документа
     QLabel *indnumlab = new QLabel();
         indnumlab->setText(tr("Дата док-та:"));
@@ -42,11 +49,6 @@ editor_letter_in::editor_letter_in(letter_in *arg, QWidget *parent) : QDialog(pa
             _in_date->setDate(_data->get_in_date());
         }
         _in_date->setMinimumWidth(80);
-        _in_date->setMaximumWidth(80);
-    QBoxLayout *dat_lay = new QBoxLayout(QBoxLayout::LeftToRight);
-    dat_lay->setAlignment(Qt::AlignLeft);
-        dat_lay->addWidget(indnumlab);
-        dat_lay->addWidget(_in_date);
 // Дата получения
     QLabel *rdlab = new QLabel();
         rdlab->setText(tr("Дата получения: "));
@@ -56,44 +58,33 @@ editor_letter_in::editor_letter_in(letter_in *arg, QWidget *parent) : QDialog(pa
         } else {
             _reception_date->setDate(_data->get_reception_date());
         }
-        _reception_date->setMaximumWidth(80);
         _reception_date->setMinimumWidth(80);
-        dat_lay->addWidget(rdlab);
-        dat_lay->addWidget(_reception_date);
+        formLayout->addWidget(indnumlab, 1, 0);
+        formLayout->addWidget(_in_date, 1, 1);
+        formLayout->addWidget(rdlab, 1, 2);
+        formLayout->addWidget(_reception_date, 1, 3);
 // Корреспондент (откуда поступил документ)
     QLabel *corlab = new QLabel();
         corlab->setText(tr("Корреспондент:   "));
         corlab->setMinimumWidth(90);
-        corlab->setMaximumWidth(90);
         _send_rec = new QLineEdit();
         _send_rec->setText(_data->get_send_rec());
         _send_rec->setMinimumWidth(527);
-        _send_rec->setMaximumWidth(527);
-    QBoxLayout *cor_lay = new QBoxLayout(QBoxLayout::LeftToRight);
-        cor_lay->addWidget(corlab);
-        cor_lay->addWidget(_send_rec);
-        cor_lay->setAlignment(Qt::AlignLeft);
-        cor_lay->addStretch();
+        formLayout->addWidget(corlab, 2, 0);
+        formLayout->addWidget(_send_rec, 2, 1, 1, 3);
 // Краткое содержание
     QLabel *contlab = new QLabel();
         contlab->setText(tr("Краткое содержание:"));
         contlab->setMinimumWidth(155);
-        contlab->setMaximumWidth(155);
         _cont = new QTextEdit();
         _cont->setPlainText(_data->get_content());
         _cont->setMinimumWidth(300);
-        _cont->setMaximumWidth(300);
         _cont->setMinimumHeight(100);
         _cont->setMaximumHeight(100);
-    QBoxLayout *cont_lay = new QBoxLayout(QBoxLayout::LeftToRight);
-        cont_lay->setAlignment(Qt::AlignLeft);
-        cont_lay->addWidget(contlab);
-        cont_lay->addWidget(_cont);
 // Кнопка просмотра изображений
         QPushButton *image_key = new QPushButton(tr("Изображения..."));
         QObject::connect(image_key, SIGNAL(clicked()), this, SLOT(slot_list_images()));
 // Контроль и фиксация документа
-    QBoxLayout *check_lay = new QBoxLayout(QBoxLayout::TopToBottom);
     QBoxLayout *control_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     QBoxLayout *fix_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     _controlbox = new QCheckBox();
@@ -105,50 +96,41 @@ editor_letter_in::editor_letter_in(letter_in *arg, QWidget *parent) : QDialog(pa
     } else _controlbox->setCheckState(Qt::Unchecked);
         _fixbox->setCheckState(Qt::Checked);
     control_lay->addWidget(controllab);
-    control_lay->addStretch();
     control_lay->addWidget(_controlbox);
+    control_lay->addStretch();
     fix_lay->addWidget(fixlab);
-    fix_lay->addStretch();
     fix_lay->addWidget(_fixbox);
-    check_lay->addLayout(control_lay);
-    check_lay->addLayout(fix_lay);
-    check_lay->addWidget(image_key);
-    cont_lay->addLayout(check_lay);
-    cont_lay->addStretch();
+    fix_lay->addStretch();
+    formLayout->addWidget(contlab, 3, 0, 3, 1);
+    formLayout->addWidget(_cont, 3, 1, 3, 2);
+    formLayout->addLayout(control_lay, 3, 3);
+    formLayout->addLayout(fix_lay, 4, 3);
+    formLayout->addWidget(image_key, 5, 3);
 // Кому передан документ
     QLabel *reclab = new QLabel();
         reclab->setText(tr("Кому передан документ:"));
         reclab->setMinimumWidth(155);
-        reclab->setMaximumWidth(155);
         _recipient = new QLineEdit();
         _recipient->setText(_data->get_recipient());
         _recipient->setMinimumWidth(300);
-        _recipient->setMaximumWidth(300);
-    QBoxLayout *rec_lay = new QBoxLayout(QBoxLayout::LeftToRight);
-        rec_lay->addWidget(reclab);
-        rec_lay->addWidget(_recipient);
-        rec_lay->addStretch();
+        formLayout->addWidget(reclab, 6, 0);
+        formLayout->addWidget(_recipient, 6, 1, 1, 3);
 // Ответственный исполнитель
     QLabel *worklab = new QLabel();
         worklab->setText(tr("Ответственный исполнитель: "));
         worklab->setMinimumWidth(155);
-        worklab->setMaximumWidth(155);
         _work = new QLineEdit();
         _work->setText(_data->get_recipient());
         _work->setMinimumWidth(300);
-        _work->setMaximumWidth(300);
-    QBoxLayout *work_lay = new QBoxLayout(QBoxLayout::LeftToRight);
-        work_lay->addWidget(worklab);
-        work_lay->addWidget(_work);
-        work_lay->addStretch();
+        formLayout->addWidget(worklab, 7, 0);
+        formLayout->addWidget(_work, 7, 1, 1, 3);
 // Финальные кнопочки
-    QBoxLayout *end_key = new QBoxLayout(QBoxLayout::LeftToRight);
         QPushButton *ok_key = new QPushButton(tr("Готово"));
         QPushButton *cancel_key = new QPushButton(tr("Отмена"));
         QObject::connect(ok_key, SIGNAL(clicked()), this, SLOT(slot_save()));
         QObject::connect(cancel_key, SIGNAL(clicked()), this, SLOT(reject()));
-        end_key->addWidget(ok_key);
-        end_key->addWidget(cancel_key);
+        formLayout->addWidget(ok_key, 8, 0, 1, 2);
+        formLayout->addWidget(cancel_key, 8, 2, 1, 2);
     if (_data->is_fix()){
         _doc_in_number->setReadOnly(true);
         _d_o_number->setReadOnly(true);
@@ -159,15 +141,7 @@ editor_letter_in::editor_letter_in(letter_in *arg, QWidget *parent) : QDialog(pa
         _reception_date->setReadOnly(true);
         _work->setReadOnly(true);
     }
-    QBoxLayout *main_lay = new QBoxLayout(QBoxLayout::TopToBottom);
-    main_lay->addLayout(num_lay);
-    main_lay->addLayout(dat_lay);
-    main_lay->addLayout(cor_lay);
-    main_lay->addLayout(cont_lay);
-    main_lay->addLayout(rec_lay);
-    main_lay->addLayout(work_lay);
-    main_lay->addLayout(end_key);
-    this->setLayout(main_lay);
+    this->setLayout(formLayout);
 }
 editor_letter_in::~editor_letter_in()
 {

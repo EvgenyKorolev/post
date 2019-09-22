@@ -1,19 +1,15 @@
 #ifndef EDITOR_LETTER_IN_H
 #define EDITOR_LETTER_IN_H
 
-#include <QObject>
-#include <QDialog>
-#include <QLayout>
-#include <QLabel>
-#include <QBoxLayout>
-#include <QPushButton>
-#include <QMessageBox>
-#include <QDateEdit>
-#include <QLineEdit>
-#include <QTextEdit>
-#include <QCheckBox>
 #include "images_editors.h"
-#include "letter_in.h"
+
+#include <QObject>
+
+class letter_in;
+class QLineEdit;
+class QDateEdit;
+class QCheckBox;
+class QTextEdit;
 
 class editor_letter_in : public QDialog
 {

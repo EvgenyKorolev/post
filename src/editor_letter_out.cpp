@@ -1,113 +1,102 @@
 #include "editor_letter_out.h"
+#include "letter_out.h"
+
+#include <QDialog>
+#include <QGridLayout>
+#include <QPushButton>
+#include <QCheckBox>
+#include <QLineEdit>
+#include <QDateEdit>
+#include <QTextEdit>
+#include <QLabel>
+#include <QMessageBox>
 
 editor_letter_out::editor_letter_out(letter_out *arg, QWidget *pather) : QDialog(pather)
 {
     _data = arg;
     this->setWindowTitle(tr("Исходящий документ:"));
     this->setWindowIcon(QIcon(":/images/KlogoS.png"));
+    QGridLayout *formLayout = new QGridLayout(this);
 // Номер фирменного бланка
     QLabel *numlab = new QLabel();
         numlab->setText(tr("№ фирм. бланка: "));
         numlab->setMinimumWidth(90);
-        numlab->setMaximumWidth(90);
         _blank_number = new QLineEdit();
         _blank_number->setText(_data->get_blank_number());
         _blank_number->setMinimumWidth(200);
-        _blank_number->setMaximumWidth(200);
-    QBoxLayout *num_lay = new QBoxLayout(QBoxLayout::LeftToRight);
-        num_lay->addWidget(numlab);
-        num_lay->addWidget(_blank_number);
 // Исходящий № док-та
     QLabel *innumlab = new QLabel();
         innumlab->setText(tr("Исходящий № док-та: "));
         innumlab->setMinimumWidth(115);
-        innumlab->setMaximumWidth(115);
         _d_o_number = new QLineEdit();
         _d_o_number->setText(_data->get_doc_out_number());
         _d_o_number->setMinimumWidth(200);
-        _d_o_number->setMaximumWidth(200);
-        num_lay->addWidget(innumlab);
-        num_lay->addWidget(_d_o_number);
-        num_lay->addStretch();
+        formLayout->addWidget(numlab, 0, 0);
+        formLayout->addWidget(_blank_number, 0, 1);
+        formLayout->addWidget(innumlab, 0, 2);
+        formLayout->addWidget(_d_o_number, 0, 3);
 // Корреспондент (кому направлен документ)
     QLabel *corlab = new QLabel();
         corlab->setText(tr("Корреспондент:"));
         corlab->setMinimumWidth(90);
-        corlab->setMaximumWidth(90);
         _send_rec = new QLineEdit();
         _send_rec->setText(_data->get_send_rec());
-        _send_rec->setMinimumWidth(527);
-        _send_rec->setMaximumWidth(527);
-    QBoxLayout *cor_lay = new QBoxLayout(QBoxLayout::LeftToRight);
-        cor_lay->addWidget(corlab);
-        cor_lay->addWidget(_send_rec);
-        cor_lay->setAlignment(Qt::AlignLeft);
-        cor_lay->addStretch();
+        _send_rec->setMinimumWidth(500);
+        formLayout->addWidget(corlab, 1, 0);
+        formLayout->addWidget(_send_rec, 1, 1, 1, 3);
 // Краткое содержание
     QLabel *contlab = new QLabel();
         contlab->setText(tr("Краткое содержание:"));
         contlab->setMinimumWidth(155);
-        contlab->setMaximumWidth(155);
         _cont = new QTextEdit();
         _cont->setPlainText(_data->get_content());
         _cont->setMinimumWidth(300);
-        _cont->setMaximumWidth(300);
         _cont->setMinimumHeight(100);
         _cont->setMaximumHeight(100);
-    QBoxLayout *cont_lay = new QBoxLayout(QBoxLayout::LeftToRight);
-        cont_lay->setAlignment(Qt::AlignLeft);
-        cont_lay->addWidget(contlab);
-        cont_lay->addWidget(_cont);
+        formLayout->addWidget(contlab, 2, 0, 2, 1);
+        formLayout->addWidget(_cont, 2, 1, 2, 2);
 // Кнопка просмотра изображений
         QPushButton *image_key = new QPushButton(tr("Изображения..."));
         QObject::connect(image_key, SIGNAL(clicked()), this, SLOT(slot_list_images()));
 // Контроль и фиксация документа
-    QBoxLayout *check_lay = new QBoxLayout(QBoxLayout::TopToBottom);
     QBoxLayout *fix_lay = new QBoxLayout(QBoxLayout::LeftToRight);
     _fixbox = new QCheckBox();
     QLabel *fixlab = new QLabel(tr("Провести:"));
         _fixbox->setCheckState(Qt::Checked);
     fix_lay->addWidget(fixlab);
-    fix_lay->addStretch();
     fix_lay->addWidget(_fixbox);
-    check_lay->addLayout(fix_lay);
-    check_lay->addWidget(image_key);
-    cont_lay->addLayout(check_lay);
-    cont_lay->addStretch();
+    fix_lay->addStretch();
+    formLayout->addLayout(fix_lay, 2, 3);
+    formLayout->addWidget(image_key, 3, 3);
 // Ответственный исполнитель
     QLabel *worklab = new QLabel();
         worklab->setText(tr("Ответственный исполнитель: "));
         worklab->setMinimumWidth(155);
-        worklab->setMaximumWidth(155);
         _work = new QLineEdit();
         _work->setText(_data->get_worker());
         _work->setMinimumWidth(300);
-        _work->setMaximumWidth(300);
-    QBoxLayout *work_lay = new QBoxLayout(QBoxLayout::LeftToRight);
-        work_lay->addWidget(worklab);
-        work_lay->addWidget(_work);
-        work_lay->addStretch();
+        formLayout->addWidget(worklab, 4, 0);
+        formLayout->addWidget(_work, 4, 1, 1, 3);
 // Примечание
     QLabel *notlab = new QLabel();
         notlab->setText(tr("Примечание: "));
         notlab->setMinimumWidth(155);
-        notlab->setMaximumWidth(155);
         _notice = new QLineEdit();
         _notice->setText(_data->get_notice());
         _notice->setMinimumWidth(300);
-        _notice->setMaximumWidth(300);
     QBoxLayout *not_lay = new QBoxLayout(QBoxLayout::LeftToRight);
         not_lay->addWidget(notlab);
         not_lay->addWidget(_notice);
         not_lay->addStretch();
+        formLayout->addWidget(notlab, 5, 0);
+        formLayout->addWidget(_notice, 5, 1, 1, 3);
 // Финальные кнопочки
-    QBoxLayout *end_key = new QBoxLayout(QBoxLayout::LeftToRight);
         QPushButton *ok_key = new QPushButton(tr("Готово"));
         QPushButton *cancel_key = new QPushButton(tr("Отмена"));
         QObject::connect(ok_key, SIGNAL(clicked()), this, SLOT(slot_save()));
         QObject::connect(cancel_key, SIGNAL(clicked()), this, SLOT(reject()));
-        end_key->addWidget(ok_key);
-        end_key->addWidget(cancel_key);
+        formLayout->addWidget(ok_key, 6, 0, 1, 2);
+        formLayout->addWidget(cancel_key, 6, 2, 1, 2);
     if (_data->is_fix()){
         _blank_number->setReadOnly(true);
         _d_o_number->setReadOnly(true);
@@ -116,14 +105,7 @@ editor_letter_out::editor_letter_out(letter_out *arg, QWidget *pather) : QDialog
         _work->setReadOnly(true);
         _notice->setReadOnly(true);
     }
-    QBoxLayout *main_lay = new QBoxLayout(QBoxLayout::TopToBottom);
-    main_lay->addLayout(num_lay);
-    main_lay->addLayout(cor_lay);
-    main_lay->addLayout(cont_lay);
-    main_lay->addLayout(work_lay);
-    main_lay->addLayout(not_lay);
-    main_lay->addLayout(end_key);
-    this->setLayout(main_lay);
+    this->setLayout(formLayout);
 }
 editor_letter_out::~editor_letter_out()
 {
